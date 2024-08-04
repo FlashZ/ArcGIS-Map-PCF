@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "0gUQtHhtR6M=",
+  "success": true,
+  "projectFilePath": "H:\\Powerapps\\MapComponent\\Powerapps.pcfproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\twist\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.0\\microsoft.netframework.referenceassemblies.1.0.0.nupkg.sha512",
+    "C:\\Users\\twist\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net462\\1.0.0\\microsoft.netframework.referenceassemblies.net462.1.0.0.nupkg.sha512",
+    "C:\\Users\\twist\\.nuget\\packages\\microsoft.powerapps.msbuild.pcf\\1.33.3\\microsoft.powerapps.msbuild.pcf.1.33.3.nupkg.sha512"
+  ],
+  "logs": []
+}

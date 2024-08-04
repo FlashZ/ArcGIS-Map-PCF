@@ -1,0 +1,24 @@
+/* Basic styling for the map container */
+.map-container {
+    width: 100%;
+    height: 400px;
+  }
+  
+  /* Styling for the layer control UI */
+  .layer-control {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: white;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  }
+  
+  .layer-control input[type="checkbox"] {
+    margin-right: 5px;
+  }
+  
+  .layer-control label {
+    margin-right: 15px;
+  }
+  

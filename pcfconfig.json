@@ -1,0 +1,19 @@
+{
+    "namespace": "MapComponent",
+    "controlName": "MapComponent",
+    "controlType": "standard",
+    "outDir": "./out/controls",
+    "resources": {
+      "code": [
+        {
+          "path": "./index.ts"
+        }
+      ],
+      "css": [
+        {
+          "path": "./styles.css"
+        }
+      ]
+    }
+  }
+  

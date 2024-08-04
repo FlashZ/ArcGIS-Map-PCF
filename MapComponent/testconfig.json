@@ -1,0 +1,14 @@
+{
+    "appId": "your-arcgis-app-id",
+    "portalUrl": "https://www.arcgis.com",
+    "webMapId": "your-web-map-id",
+    "visibleLayers": "layer1-id,layer2-id",
+    "readOnly": "false",
+    "lookupField": "field-to-focus",
+    "lookupLayerId": "lookup-layer-id",
+    "addressMode": "none",
+    "latitudeField": "latitude-value",
+    "longitudeField": "longitude-value",
+    "addressField": "address-value"
+  }
+  
