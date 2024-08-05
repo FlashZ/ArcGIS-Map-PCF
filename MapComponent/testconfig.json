@@ -6,5 +6,6 @@
   "visibleLayers": "540a01af91bf4915881ee65a4bd49a18",
   "readOnly": "false",
   "featureLayerUrl": "https://utility.arcgis.com/usrsvcs/servers/540a01af91bf4915881ee65a4bd49a18/rest/services/Combined_Regions/FeatureServer",
-  "projectionType": 2193
+  "projectionType": "2193",
+  "projectId": "IF-HN-1001"
 }

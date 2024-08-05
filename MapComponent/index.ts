@@ -1,9 +1,11 @@
 import { IInputs, IOutputs } from "./generated/ManifestTypes";
+import Map from "@arcgis/core/Map";
 import MapView from "@arcgis/core/views/MapView";
 import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
 import esriConfig from "@arcgis/core/config";
 import OAuthInfo from "@arcgis/core/identity/OAuthInfo";
 import IdentityManager from "@arcgis/core/identity/IdentityManager";
+import Query from "@arcgis/core/rest/support/Query";
 import * as projection from "@arcgis/core/geometry/projection";
 import SpatialReference from "@arcgis/core/geometry/SpatialReference";
 import "./styles.css"; // Import the CSS file
@@ -19,6 +21,7 @@ interface TestConfig {
   readOnly?: string;
   featureLayerUrl?: string;
   projectionType?: number;
+  projectId?: string;
 }
 
 interface LocalizationData {
@@ -86,14 +89,16 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
   }
 
   private configureEsri(config: ContextType["parameters"] | TestConfig): void {
-    const portalUrl = getStringProperty((config as ContextType["parameters"]).portalUrl) || (config as TestConfig).portalUrl || "https://www.arcgis.com";
+    const portalUrl = getStringProperty(config["portalUrl"]) || (config as TestConfig).portalUrl || "https://www.arcgis.com";
+    console.log("Using portal URL:", portalUrl);
     esriConfig.portalUrl = portalUrl;
 
-    const clientId = getStringProperty((config as ContextType["parameters"]).clientId) || (config as TestConfig).clientId || "";
+    const clientId = getStringProperty(config["clientId"]) || (config as TestConfig).clientId || "";
     if (!clientId) {
       console.error("Client ID is required for OAuth configuration.");
       return;
     }
+    console.log("Using client ID:", clientId);
 
     const info = new OAuthInfo({
       appId: clientId,
@@ -102,37 +107,58 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
     });
     IdentityManager.registerOAuthInfos([info]);
 
-    IdentityManager.checkSignInStatus(info.portalUrl + "/sharing").then(() => {
-      this.loadMap(config);
-    }).catch(() => {
-      IdentityManager.getCredential(info.portalUrl + "/sharing");
-    });
+    IdentityManager.checkSignInStatus(info.portalUrl + "/sharing")
+      .then(() => {
+        console.log("User is signed in");
+        this.loadMap(config);
+      })
+      .catch((error) => {
+        console.error("Sign-in status check failed:", error);
+        IdentityManager.getCredential(info.portalUrl + "/sharing")
+          .then(() => {
+            console.log("Credential acquired");
+            this.loadMap(config);
+          })
+          .catch((error) => {
+            console.error("Failed to acquire credential:", error);
+            this.showErrorMessage("Authentication failed. Please check your credentials.");
+          });
+      });
   }
 
   private loadMap(config: ContextType["parameters"] | TestConfig): void {
-    const featureLayerUrl = getStringProperty((config as ContextType["parameters"]).featureLayerUrl) || (config as TestConfig).featureLayerUrl || "";
-    const projectionType = getNumberProperty((config as ContextType["parameters"]).projectionType) || (config as TestConfig).projectionType || 4326;
+    const featureLayerUrl = getStringProperty(config["featureLayerUrl"]) || (config as TestConfig).featureLayerUrl || "";
+    const projectionType = getNumberProperty(config["projectionType"]) || (config as TestConfig).projectionType || 4326;
+    const projectId = getStringProperty(config["projectId"]) || (config as TestConfig).projectId || "";
+
+    if (!featureLayerUrl) {
+      console.error("Feature layer URL is required.");
+      return;
+    }
 
     const featureLayer = new FeatureLayer({
       url: featureLayerUrl
     });
 
-    this._mapView = new MapView({
-      container: this._container,
-      map: {
+    featureLayer.load().then(() => {
+      const map = new Map({
         basemap: "streets-navigation-vector",
         layers: [featureLayer]
-      }
-    });
+      });
 
-    this._mapView.when(() => {
-      console.log("Map and View are ready");
-    }).catch((error: Error) => {
-      console.error("Map loading error:", error);
-      this.showErrorMessage("Map loading error: " + error.message);
-    });
+      this._mapView = new MapView({
+        container: this._container,
+        map: map
+      });
 
-    featureLayer.when(() => {
+      this._mapView.when(() => {
+        console.log("Map and View are ready");
+        this.filterAndZoomToProject(featureLayer, projectId, projectionType);
+      }).catch((error: Error) => {
+        console.error("Map loading error:", error);
+        this.showErrorMessage("Map loading error: " + error.message);
+      });
+
       this.projectLayer(featureLayer, projectionType);
     }).catch((error: Error) => {
       console.error("Feature layer loading error:", error);
@@ -140,12 +166,41 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
     });
   }
 
+  private filterAndZoomToProject(featureLayer: FeatureLayer, projectId: string, projectionType: number): void {
+    if (!projectId) return;
+
+    const query = featureLayer.createQuery();
+    query.where = `project_id = '${projectId}'`;
+    query.returnGeometry = true;
+    query.outSpatialReference = new SpatialReference({ wkid: projectionType });
+
+    featureLayer.queryFeatures(query).then((results) => {
+      if (results.features.length > 0) {
+        this._mapView?.goTo(results.features).catch((error: Error) => {
+          console.error("Zoom error:", error);
+          this.showErrorMessage("Zoom error: " + error.message);
+        });
+      } else {
+        console.warn("No features found for project ID:", projectId);
+        this.showErrorMessage("No features found for the provided project ID.");
+      }
+    }).catch((error: Error) => {
+      console.error("Query error:", error);
+      this.showErrorMessage("Query error: " + error.message);
+    });
+  }
+
   private projectLayer(featureLayer: FeatureLayer, projectionType: number): void {
     projection.load().then(() => {
       const spatialReference = new SpatialReference({ wkid: projectionType });
-      featureLayer.source.forEach((graphic) => {
-        const projectedGeometry = projection.project(graphic.geometry, spatialReference);
-        console.log("Projected Geometry:", projectedGeometry);
+      featureLayer.queryFeatures().then((featureSet) => {
+        featureSet.features.forEach((feature) => {
+          const projectedGeometry = projection.project(feature.geometry, spatialReference);
+          console.log("Projected Geometry:", projectedGeometry);
+        });
+      }).catch((error: Error) => {
+        console.error("Error querying features:", error);
+        this.showErrorMessage("Error querying features: " + error.message);
       });
     }).catch((error: Error) => {
       console.error("Projection error:", error);

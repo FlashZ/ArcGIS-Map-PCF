@@ -10,6 +10,7 @@ export interface IInputs {
     webMapId: ComponentFramework.PropertyTypes.StringProperty;
     featureLayerUrl: ComponentFramework.PropertyTypes.StringProperty;
     projectionType: ComponentFramework.PropertyTypes.WholeNumberProperty;
+    projectId: ComponentFramework.PropertyTypes.StringProperty;
     visibleLayers: ComponentFramework.PropertyTypes.StringProperty;
     readOnly: ComponentFramework.PropertyTypes.EnumProperty<"true" | "false">;
     localization: ComponentFramework.PropertyTypes.StringProperty;
@@ -17,4 +18,5 @@ export interface IInputs {
 }
 export interface IOutputs {
     featureLayerUrl?: string;
+    projectId?: string;
 }
