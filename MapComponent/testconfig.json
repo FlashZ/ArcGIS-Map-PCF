@@ -1,14 +1,10 @@
 {
-    "appId": "your-arcgis-app-id",
-    "portalUrl": "https://www.arcgis.com",
-    "webMapId": "your-web-map-id",
-    "visibleLayers": "layer1-id,layer2-id",
-    "readOnly": "false",
-    "lookupField": "field-to-focus",
-    "lookupLayerId": "lookup-layer-id",
-    "addressMode": "none",
-    "latitudeField": "latitude-value",
-    "longitudeField": "longitude-value",
-    "addressField": "address-value"
-  }
-  
+  "portalUrl": "https://ultrafast.maps.arcgis.com/",
+  "clientId": "REvdjVLPtORmWelH",
+  "clientSecret": "d0e92bfa74e94d7398fe108d1f2e6c94",
+  "webMapId": "76c61c9d28234d42950372fbed92ac04",
+  "visibleLayers": "540a01af91bf4915881ee65a4bd49a18",
+  "readOnly": "false",
+  "featureLayerUrl": "https://utility.arcgis.com/usrsvcs/servers/540a01af91bf4915881ee65a4bd49a18/rest/services/Combined_Regions/FeatureServer",
+  "projectionType": 2193
+}
