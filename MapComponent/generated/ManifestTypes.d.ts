@@ -11,6 +11,7 @@ export interface IInputs {
     lookupLayerId: ComponentFramework.PropertyTypes.StringProperty;
     lookupFieldName: ComponentFramework.PropertyTypes.StringProperty;
     lookupFieldValue: ComponentFramework.PropertyTypes.StringProperty;
+    logoUrl: ComponentFramework.PropertyTypes.StringProperty;
 }
 export interface IOutputs {
 }

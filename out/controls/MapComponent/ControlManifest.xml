@@ -11,6 +11,7 @@
     <property name="lookupLayerId" display-name-key="Lookup Layer ID" description-key="ID of the layer to perform lookups on" of-type="SingleLine.Text" usage="input" required="false"/>
     <property name="lookupFieldName" display-name-key="Lookup Field Name" description-key="Name of the field to perform lookups on" of-type="SingleLine.Text" usage="input" required="false"/>
     <property name="lookupFieldValue" display-name-key="Lookup Field Value" description-key="Value of the field to perform lookups on" of-type="SingleLine.Text" usage="input" required="false"/>
+    <property name="logoUrl" display-name-key="Logo URL" description-key="URL of the logo image to display" of-type="SingleLine.Text" usage="input" required="false"/>
     <resources>
       <code path="bundle.js" order="1"/>
       <css path="styles.css" order="1"/>
