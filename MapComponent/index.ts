@@ -64,7 +64,7 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
     const clientId = parameters.clientId.raw || "";
     const webMapId = parameters.webMapId.raw || "";
     const projectionType = parameters.projectionType.raw || 4326;
-    const lookupLayerId = parameters.lookupLayerId?.raw || "";
+    const lookupLayerTitle = parameters.lookupLayerId?.raw || ""; // Changed to use title
     const lookupFieldName = parameters.lookupFieldName?.raw || "";
     const lookupFieldValue = parameters.lookupFieldValue?.raw || "";
 
@@ -91,7 +91,7 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
       // Authenticate with ArcGIS
       await IdentityManager.getCredential(`${portalUrl}/sharing`);
       // Create and configure the WebMap
-      await this.createWebMap(webMapId, lookupLayerId, lookupFieldName, lookupFieldValue, projectionType);
+      await this.createWebMap(webMapId, lookupLayerTitle, lookupFieldName, lookupFieldValue, projectionType);
     } catch (error) {
       console.error("Authentication or map creation failed:", error);
     }
@@ -100,12 +100,12 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
   /**
    * Creates and configures the WebMap.
    * @param webMapId The ID of the WebMap.
-   * @param lookupLayerId The ID of the layer to lookup.
+   * @param lookupLayerTitle The title of the layer to lookup.
    * @param lookupFieldName The field name to lookup.
    * @param lookupFieldValue The value to lookup in the field.
    * @param projectionType The projection type (spatial reference).
    */
-  private async createWebMap(webMapId: string, lookupLayerId: string, lookupFieldName: string, lookupFieldValue: string, projectionType: number): Promise<void> {
+  private async createWebMap(webMapId: string, lookupLayerTitle: string, lookupFieldName: string, lookupFieldValue: string, projectionType: number): Promise<void> {
     // Initialize the WebMap with the provided ID
     const webMap = new WebMap({
       portalItem: {
@@ -116,6 +116,9 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
     try {
       // Wait for the WebMap to load
       await webMap.load();
+
+      // Log the layers to debug the lookup issue
+      console.log("Loaded WebMap layers:", webMap.layers);
 
       // Initialize the MapView with the WebMap
       this._mapView = new MapView({
@@ -137,8 +140,8 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
       this.addWidgets();
 
       // Perform layer lookup if parameters are provided
-      if (lookupLayerId && lookupFieldName && lookupFieldValue) {
-        await this.performLayerLookup(webMap, lookupLayerId, lookupFieldName, lookupFieldValue, projectionType);
+      if (lookupLayerTitle && lookupFieldName && lookupFieldValue) {
+        await this.performLayerLookup(webMap, lookupLayerTitle, lookupFieldName, lookupFieldValue, projectionType);
       }
     } catch (error) {
       console.error("Error in map creation or initialization:", error);
@@ -190,14 +193,21 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
   /**
    * Performs a lookup on a specified layer and zooms to the feature if found.
    * @param webMap The WebMap instance.
-   * @param lookupLayerId The ID of the layer to lookup.
+   * @param lookupLayerTitle The title of the layer to lookup.
    * @param lookupFieldName The field name to lookup.
    * @param lookupFieldValue The value to lookup in the field.
    * @param projectionType The projection type (spatial reference).
    */
-  private async performLayerLookup(webMap: WebMap, lookupLayerId: string, lookupFieldName: string, lookupFieldValue: string, projectionType: number): Promise<void> {
-    // Find the layer in the WebMap by ID
-    const lookupLayer = webMap.layers.find(layer => layer.id === lookupLayerId) as FeatureLayer;
+  private async performLayerLookup(webMap: WebMap, lookupLayerTitle: string, lookupFieldName: string, lookupFieldValue: string, projectionType: number): Promise<void> {
+    // Log available layers
+    console.log("Performing layer lookup. Available layers:", webMap.layers.toArray().map(layer => ({
+      id: layer.id,
+      title: layer.title,
+      type: layer.type
+    })));
+
+    // Find the layer in the WebMap by title
+    const lookupLayer = webMap.layers.find(layer => layer.title === lookupLayerTitle) as FeatureLayer;
     if (!lookupLayer) {
       console.error("Lookup layer not found");
       return;
