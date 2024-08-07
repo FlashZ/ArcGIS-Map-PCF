@@ -1,23 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
-  <control namespace="ARCGISMapPCF" constructor="MapComponent" version="0.0.1" display-name-key="MapComponent" description-key="MapComponent description" control-type="standard">
-    <external-service-usage enabled="false">
+  <control namespace="ARCGISMapPCF" constructor="MapComponent" version="0.0.3" display-name-key="MapComponent" description-key="MapComponent description" control-type="standard">
+    <external-service-usage enabled="true">
       <domain>www.arcgis.com</domain>
     </external-service-usage>
     <property name="clientId" display-name-key="Client ID" description-key="ArcGIS Client ID for authentication" of-type="SingleLine.Text" usage="input" required="true" />
-    <property name="clientSecret" display-name-key="Client Secret" description-key="ArcGIS Client Secret for authentication" of-type="SingleLine.Text" usage="input" required="true" />
     <property name="portalUrl" display-name-key="Portal URL" description-key="ArcGIS Portal URL" of-type="SingleLine.Text" usage="input" required="true" />
     <property name="webMapId" display-name-key="Web Map ID" description-key="ID of the ArcGIS Web Map to display" of-type="SingleLine.Text" usage="input" required="true" />
-    <property name="featureLayerUrl" display-name-key="Feature Layer URL" description-key="Feature Layer URL" of-type="SingleLine.Text" usage="bound" required="true" />
     <property name="projectionType" display-name-key="Projection Type" description-key="Type of projection to use for the map" of-type="Whole.None" usage="input" required="false"/>
-    <property name="projectId" display-name-key="Project ID" description-key="Project ID to filter and zoom to" of-type="SingleLine.Text" usage="bound" required="false" />
-    <property name="visibleLayers" display-name-key="Visible Layers" description-key="Comma-separated list of layer IDs to display" of-type="SingleLine.Text" usage="input" required="false" />
-    <property name="readOnly" display-name-key="Read Only" description-key="Set to true to prevent user interaction with the map" of-type="Enum" usage="input" required="false">
-      <value name="true" display-name-key="Yes">true</value>
-      <value name="false" display-name-key="No">false</value>
-    </property>
-    <property name="localization" display-name-key="Localization" description-key="Localization settings for UI elements" of-type="SingleLine.Text" usage="input" required="false" />
-    <property name="theme" display-name-key="Theme" description-key="Theme settings for map appearance" of-type="SingleLine.Text" usage="input" required="false" />
+    <property name="lookupLayerId" display-name-key="Lookup Layer ID" description-key="ID of the layer to perform lookups on" of-type="SingleLine.Text" usage="input" usage="bound" required="false" />
+    <property name="lookupFieldName" display-name-key="Lookup Field Name" description-key="Name of the field to perform lookups on" of-type="SingleLine.Text" usage="input" usage="bound" required="false" />
+    <property name="lookupFieldValue" display-name-key="Lookup Field Value" description-key="Value of the field to perform lookups on" of-type="SingleLine.Text" usage="input" usage="bound" required="false" />
     <resources>
       <code path="index.ts" order="1"/>
       <css path="styles.css" order="1" />

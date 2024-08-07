@@ -1,218 +1,184 @@
 import { IInputs, IOutputs } from "./generated/ManifestTypes";
-import Map from "@arcgis/core/Map";
+import WebMap from "@arcgis/core/WebMap";
 import MapView from "@arcgis/core/views/MapView";
 import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
 import esriConfig from "@arcgis/core/config";
 import OAuthInfo from "@arcgis/core/identity/OAuthInfo";
 import IdentityManager from "@arcgis/core/identity/IdentityManager";
-import Query from "@arcgis/core/rest/support/Query";
-import * as projection from "@arcgis/core/geometry/projection";
 import SpatialReference from "@arcgis/core/geometry/SpatialReference";
-import "./styles.css"; // Import the CSS file
-
-const isLocalTesting = process.env.NODE_ENV === 'development';
-
-interface TestConfig {
-  portalUrl?: string;
-  clientId?: string;
-  clientSecret?: string;
-  webMapId?: string;
-  visibleLayers?: string;
-  readOnly?: string;
-  featureLayerUrl?: string;
-  projectionType?: number;
-  projectId?: string;
-}
-
-interface LocalizationData {
-  errors: {
-    mapLoading: string;
-    authentication: string;
-  };
-  labels: {
-    appId: string;
-    portalUrl: string;
-    featureLayerUrl: string;
-  };
-}
-
-let testConfig: TestConfig = {};
-if (isLocalTesting) {
-  try {
-    testConfig = require('./testconfig.json');
-  } catch (error) {
-    console.error('Could not load test config:', error);
-  }
-}
-
-type ContextType = ComponentFramework.Context<IInputs>;
-
-function getStringProperty(value: string | ComponentFramework.PropertyTypes.StringProperty | undefined): string {
-  if (typeof value === "string") {
-    return value;
-  } else if (value && value.raw) {
-    return value.raw;
-  }
-  return "";
-}
-
-function getNumberProperty(value: number | ComponentFramework.PropertyTypes.NumberProperty | undefined): number {
-  if (typeof value === "number") {
-    return value;
-  } else if (value && value.raw !== null) {
-    return value.raw;
-  }
-  return NaN;
-}
+import LayerList from "@arcgis/core/widgets/LayerList";
+import Home from "@arcgis/core/widgets/Home";
+import Zoom from "@arcgis/core/widgets/Zoom";
+import Expand from "@arcgis/core/widgets/Expand";
 
 export class MapComponent implements ComponentFramework.StandardControl<IInputs, IOutputs> {
   private _container: HTMLDivElement;
+  private _mapViewContainer: HTMLDivElement;
   private _mapView: MapView | null = null;
 
-  constructor() {}
-
   public init(
-    context: ContextType,
+    context: ComponentFramework.Context<IInputs>,
     notifyOutputChanged: () => void,
     state: ComponentFramework.Dictionary,
     container: HTMLDivElement
   ): void {
-    this._container = document.createElement("div");
-    this._container.className = "map-container"; // Add class name for styling
-    container.appendChild(this._container);
+    this._container = container;
 
-    if (isLocalTesting) {
-      this.configureEsri(testConfig);
-    } else {
-      this.configureEsri(context.parameters);
-    }
+    // Create a separate container for the map view
+    this._mapViewContainer = document.createElement('div');
+    this._mapViewContainer.style.width = '100%';
+    this._mapViewContainer.style.height = '100%';
+    this._container.appendChild(this._mapViewContainer);
+
+    // Initialize the map
+    this.initializeMap(context.parameters);
+
+    // Track container resize
+    context.mode.trackContainerResize(true);
   }
 
-  private configureEsri(config: ContextType["parameters"] | TestConfig): void {
-    const portalUrl = getStringProperty(config["portalUrl"]) || (config as TestConfig).portalUrl || "https://www.arcgis.com";
-    console.log("Using portal URL:", portalUrl);
-    esriConfig.portalUrl = portalUrl;
+  private async initializeMap(parameters: IInputs): Promise<void> {
+    const portalUrl = parameters.portalUrl.raw || "https://www.arcgis.com";
+    const clientId = parameters.clientId.raw || "";
+    const webMapId = parameters.webMapId.raw || "";
+    const projectionType = parameters.projectionType.raw || 4326;
+    const lookupLayerId = parameters.lookupLayerId?.raw || "";
+    const lookupFieldName = parameters.lookupFieldName?.raw || "";
+    const lookupFieldValue = parameters.lookupFieldValue?.raw || "";
 
-    const clientId = getStringProperty(config["clientId"]) || (config as TestConfig).clientId || "";
-    if (!clientId) {
-      console.error("Client ID is required for OAuth configuration.");
+    if (!clientId || !webMapId) {
+      console.error("Client ID and Web Map ID are required.");
       return;
     }
-    console.log("Using client ID:", clientId);
+
+    esriConfig.portalUrl = portalUrl;
+    
+    // Set assetsPath to fix potential loading issues
+    esriConfig.assetsPath = "https://js.arcgis.com/4.26/@arcgis/core/assets";
 
     const info = new OAuthInfo({
       appId: clientId,
-      portalUrl,
+      portalUrl: portalUrl,
       popup: false
     });
+
     IdentityManager.registerOAuthInfos([info]);
 
-    IdentityManager.checkSignInStatus(info.portalUrl + "/sharing")
-      .then(() => {
-        console.log("User is signed in");
-        this.loadMap(config);
-      })
-      .catch((error) => {
-        console.error("Sign-in status check failed:", error);
-        IdentityManager.getCredential(info.portalUrl + "/sharing")
-          .then(() => {
-            console.log("Credential acquired");
-            this.loadMap(config);
-          })
-          .catch((error) => {
-            console.error("Failed to acquire credential:", error);
-            this.showErrorMessage("Authentication failed. Please check your credentials.");
-          });
-      });
+    try {
+      await IdentityManager.getCredential(`${portalUrl}/sharing`);
+      await this.createWebMap(webMapId, lookupLayerId, lookupFieldName, lookupFieldValue, projectionType);
+    } catch (error) {
+      console.error("Authentication or map creation failed:", error);
+    }
   }
 
-  private loadMap(config: ContextType["parameters"] | TestConfig): void {
-    const featureLayerUrl = getStringProperty(config["featureLayerUrl"]) || (config as TestConfig).featureLayerUrl || "";
-    const projectionType = getNumberProperty(config["projectionType"]) || (config as TestConfig).projectionType || 4326;
-    const projectId = getStringProperty(config["projectId"]) || (config as TestConfig).projectId || "";
+  private async createWebMap(webMapId: string, lookupLayerId: string, lookupFieldName: string, lookupFieldValue: string, projectionType: number): Promise<void> {
+    const webMap = new WebMap({
+      portalItem: {
+        id: webMapId
+      }
+    });
 
-    if (!featureLayerUrl) {
-      console.error("Feature layer URL is required.");
+    try {
+      await webMap.load();
+
+      this._mapView = new MapView({
+        container: this._mapViewContainer,
+        map: webMap,
+        ui: {
+          components: ["attribution"]
+        }
+      });
+
+      // Add passive event listener for wheel events
+      this._mapViewContainer.addEventListener('wheel', () => {}, { passive: true });
+
+      await this._mapView.when();
+      console.log("WebMap and View are ready");
+      this.addWidgets();
+      if (lookupLayerId && lookupFieldName && lookupFieldValue) {
+        await this.performLayerLookup(webMap, lookupLayerId, lookupFieldName, lookupFieldValue, projectionType);
+      }
+    } catch (error) {
+      console.error("Error in map creation or initialization:", error);
+    }
+  }
+
+  private addWidgets(): void {
+    if (!this._mapView) return;
+
+    const layerList = new LayerList({
+      view: this._mapView,
+      listItemCreatedFunction: (event) => {
+        const item = event.item;
+        if (item.layer.type !== "group") {
+          item.panel = {
+            content: "legend",
+            open: false // Ensure the panel is collapsed by default
+          };
+        }
+      }
+    });
+
+    const expand = new Expand({
+      view: this._mapView,
+      content: layerList,
+      expanded: false // Ensure the Expand widget is collapsed by default
+    });
+
+    this._mapView.ui.add(expand, "top-right");
+
+    const homeWidget = new Home({
+      view: this._mapView
+    });
+    this._mapView.ui.add(homeWidget, "top-left");
+
+    const zoomWidget = new Zoom({
+      view: this._mapView
+    });
+    this._mapView.ui.add(zoomWidget, "top-left");
+  }
+
+  private async performLayerLookup(webMap: WebMap, lookupLayerId: string, lookupFieldName: string, lookupFieldValue: string, projectionType: number): Promise<void> {
+    const lookupLayer = webMap.layers.find(layer => layer.id === lookupLayerId) as FeatureLayer;
+    if (!lookupLayer) {
+      console.error("Lookup layer not found");
       return;
     }
 
-    const featureLayer = new FeatureLayer({
-      url: featureLayerUrl
-    });
-
-    featureLayer.load().then(() => {
-      const map = new Map({
-        basemap: "streets-navigation-vector",
-        layers: [featureLayer]
-      });
-
-      this._mapView = new MapView({
-        container: this._container,
-        map: map
-      });
-
-      this._mapView.when(() => {
-        console.log("Map and View are ready");
-        this.filterAndZoomToProject(featureLayer, projectId, projectionType);
-      }).catch((error: Error) => {
-        console.error("Map loading error:", error);
-        this.showErrorMessage("Map loading error: " + error.message);
-      });
-
-      this.projectLayer(featureLayer, projectionType);
-    }).catch((error: Error) => {
-      console.error("Feature layer loading error:", error);
-      this.showErrorMessage("Feature layer loading error: " + error.message);
-    });
-  }
-
-  private filterAndZoomToProject(featureLayer: FeatureLayer, projectId: string, projectionType: number): void {
-    if (!projectId) return;
-
-    const query = featureLayer.createQuery();
-    query.where = `project_id = '${projectId}'`;
+    const query = lookupLayer.createQuery();
+    query.where = `${lookupFieldName} = '${lookupFieldValue}'`;
     query.returnGeometry = true;
-    query.outSpatialReference = new SpatialReference({ wkid: projectionType });
+    query.outSpatialReference = SpatialReference.fromJSON({ wkid: projectionType });
 
-    featureLayer.queryFeatures(query).then((results) => {
+    try {
+      const results = await lookupLayer.queryFeatures(query);
       if (results.features.length > 0) {
-        this._mapView?.goTo(results.features).catch((error: Error) => {
-          console.error("Zoom error:", error);
-          this.showErrorMessage("Zoom error: " + error.message);
-        });
+        const feature = results.features[0];
+        await this._mapView?.goTo(feature.geometry);
       } else {
-        console.warn("No features found for project ID:", projectId);
-        this.showErrorMessage("No features found for the provided project ID.");
+        console.warn("No features found for the given lookup value in the lookup layer");
       }
-    }).catch((error: Error) => {
-      console.error("Query error:", error);
-      this.showErrorMessage("Query error: " + error.message);
-    });
+    } catch (error) {
+      console.error("Lookup query error:", error);
+    }
   }
 
-  private projectLayer(featureLayer: FeatureLayer, projectionType: number): void {
-    projection.load().then(() => {
-      const spatialReference = new SpatialReference({ wkid: projectionType });
-      featureLayer.queryFeatures().then((featureSet) => {
-        featureSet.features.forEach((feature) => {
-          const projectedGeometry = projection.project(feature.geometry, spatialReference);
-          console.log("Projected Geometry:", projectedGeometry);
-        });
-      }).catch((error: Error) => {
-        console.error("Error querying features:", error);
-        this.showErrorMessage("Error querying features: " + error.message);
-      });
-    }).catch((error: Error) => {
-      console.error("Projection error:", error);
-      this.showErrorMessage("Projection error: " + error.message);
-    });
-  }
+  public updateView(context: ComponentFramework.Context<IInputs>): void {
+    
+    // Update container size
+    this._container.style.width = `${context.mode.allocatedWidth}px`;
+    this._container.style.height = `${context.mode.allocatedHeight}px`;
 
-  private showErrorMessage(message: string): void {
-    this._container.innerHTML = `<div class="error-message">${message}</div>`;
+    // Trigger a manual resize event
+    if (this._mapView) {
+      window.setTimeout(() => {
+        if (this._mapView) {
+          this._mapView.container.dispatchEvent(new Event('resize'));
+        }
+      }, 0);
+    }
   }
-
-  public updateView(context: ContextType): void {}
 
   public getOutputs(): IOutputs {
     return {};
@@ -224,45 +190,3 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
     }
   }
 }
-
-// Add fallback for localization
-const defaultLocalization: LocalizationData = {
-  "errors": {
-    "mapLoading": "An error occurred while loading the map.",
-    "authentication": "Authentication failed. Please check your credentials."
-  },
-  "labels": {
-    "appId": "App ID",
-    "portalUrl": "Portal URL",
-    "featureLayerUrl": "Feature Layer URL"
-  }
-};
-
-function loadLocalization(): void {
-  const defaultLocale = "en-nz";
-  const localeFile = `loc/${defaultLocale}/diagnosticMessages.localized.json`;
-
-  fetch(localeFile)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Localization file not found");
-      }
-      return response.json();
-    })
-    .then((data: LocalizationData) => {
-      // Apply localization settings
-      console.log("Localization loaded:", data);
-    })
-    .catch((error) => {
-      console.error("Failed to load localization, using default:", error);
-      // Load default localization settings
-      applyLocalization(defaultLocalization);
-    });
-}
-
-function applyLocalization(localization: LocalizationData): void {
-  console.log("Applying localization settings:", localization);
-  // Apply the localization settings as needed
-}
-
-loadLocalization();

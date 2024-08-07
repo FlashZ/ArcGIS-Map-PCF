@@ -1,0 +1,11 @@
+{
+    "/arcgis": {
+      "target": "http://maps.ultrafastfibre.co.nz",
+      "secure": false,
+      "changeOrigin": true,
+      "pathRewrite": {
+        "^/arcgis": ""
+      }
+    }
+  }
+  
