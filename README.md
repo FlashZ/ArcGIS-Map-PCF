@@ -109,7 +109,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Author
 
-- **[Nick Kerr-Bell](mailto:your.email@example.com)**
+- **[Nick Kerr-Bell](mailto:nick@Lanflat.net)**
 - **[FlashZ](https://github.com/FlashZ)**
 
 ## Acknowledgements
