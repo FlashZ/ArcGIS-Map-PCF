@@ -21,6 +21,7 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
   private _container: HTMLDivElement; // The main container for the component
   private _mapViewContainer: HTMLDivElement; // Container specifically for the map view
   private _mapView: MapView | null = null; // The MapView instance
+  private _controlViewRendered: boolean;
   private _context: ComponentFramework.Context<IInputs>; // The context provided by the PowerApps framework
   private _notifyOutputChanged: () => void; // Callback function to notify the framework of output changes
 
@@ -31,6 +32,7 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
    * @param state The control state.
    * @param container The HTML element to render the control in.
    */
+
   public init(
     context: ComponentFramework.Context<IInputs>,
     notifyOutputChanged: () => void,
@@ -39,18 +41,27 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
   ): void {
     // Save context and callback
     this._context = context;
+    this._controlViewRendered = false;
     this._container = container;
     this._notifyOutputChanged = notifyOutputChanged;
-
+  
     // Create a container for the map view and append it to the main container
     this._mapViewContainer = document.createElement('div');
     this._mapViewContainer.style.width = '100%';
     this._mapViewContainer.style.height = '100%';
+    this._mapViewContainer.classList.add("ArcGISMap_Container");
     this._container.appendChild(this._mapViewContainer);
-
-    // Initialize the map with the provided parameters
-    this.initializeMap(context.parameters);
-
+  
+    // Wrap the map initialization in a try-catch block
+    try {
+      // Initialize the map with the provided parameters
+      this.initializeMap(context.parameters);
+    } catch (error) {
+      console.error("Map initialization failed:", error);
+      // Optionally, display a placeholder or message in the designer
+      this._mapViewContainer.innerText = "Map will render during runtime.";
+    }
+  
     // Track container resize events to adjust the map view accordingly
     context.mode.trackContainerResize(true);
   }
@@ -59,44 +70,79 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
    * Initializes the ArcGIS map with given parameters.
    * @param parameters The input parameters for the map.
    */
-  private async initializeMap(parameters: IInputs): Promise<void> {
+  private async authenticateArcGIS(parameters: IInputs): Promise<boolean> {
     const portalUrl = parameters.portalUrl.raw || "https://www.arcgis.com";
     const clientId = parameters.clientId.raw || "";
-    const webMapId = parameters.webMapId.raw || "";
-    const projectionType = parameters.projectionType.raw || 4326;
-    const lookupLayerTitle = parameters.lookupLayerId?.raw || ""; // Changed to use title
-    const lookupFieldName = parameters.lookupFieldName?.raw || "";
-    const lookupFieldValue = parameters.lookupFieldValue?.raw || "";
-    const logoUrl = parameters.logoUrl.raw || "";
-
-    // Ensure required parameters are provided
-    if (!clientId || !webMapId) {
-      console.error("Client ID and Web Map ID are required.");
-      return;
+  
+    if (!clientId) {
+      console.error("Client ID is not provided.");
+      return false;
     }
-
-    // Configure the ArcGIS portal URL and assets path
+  
     esriConfig.portalUrl = portalUrl;
-    esriConfig.assetsPath = "https://js.arcgis.com/4.26/@arcgis/core/assets";
-
-    // Set up OAuth for ArcGIS
+  
     const info = new OAuthInfo({
       appId: clientId,
       portalUrl: portalUrl,
-      popup: false
+      popup: false,
+      //popupCallbackUrl: window.location.href
     });
-
+  
     IdentityManager.registerOAuthInfos([info]);
-
+  
+    // Check if we already have a credential
+    const credential = IdentityManager.findCredential(portalUrl);
+    if (credential) {
+      console.log("Already authenticated");
+      return true;
+    }
+  
     try {
-      // Authenticate with ArcGIS
-      await IdentityManager.getCredential(`${portalUrl}/sharing`);
-      // Create and configure the WebMap
-      await this.createWebMap(webMapId, lookupLayerTitle, lookupFieldName, lookupFieldValue, projectionType, logoUrl);
+      await IdentityManager.checkSignInStatus(portalUrl);
+      console.log("Authentication successful");
+      return true;
     } catch (error) {
-      console.error("Authentication or map creation failed:", error);
+      console.log("User is not authenticated, attempting to get credential");
+      try {
+        await IdentityManager.getCredential(portalUrl);
+        console.log("Authentication successful");
+        return true;
+      } catch (error) {
+        console.error("Authentication failed:", error);
+        return false;
+      }
     }
   }
+  
+
+  private async initializeMap(parameters: IInputs): Promise<void> {
+    const isAuthenticated = await this.authenticateArcGIS(parameters);
+  
+    if (!isAuthenticated) {
+      console.error("Could not authenticate with ArcGIS");
+      return;
+    }
+  
+    const webMapId = parameters.webMapId.raw || "";
+    const projectionType = parameters.projectionType.raw || 4326;
+    const lookupLayerTitle = parameters.lookupLayerId?.raw || "";
+    const lookupFieldName = parameters.lookupFieldName?.raw || "";
+    const lookupFieldValue = parameters.lookupFieldValue?.raw || "";
+    const logoUrl = parameters.logoUrl.raw || "";
+  
+    try {
+      await this.createWebMap(
+        webMapId,
+        lookupLayerTitle,
+        lookupFieldName,
+        lookupFieldValue,
+        projectionType
+      );
+    } catch (error) {
+      console.error("Map creation failed:", error);
+    }
+  }
+
 
   /**
    * Creates and configures the WebMap.
@@ -107,7 +153,7 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
    * @param projectionType The projection type (spatial reference).
    * @param logoUrl The URL of the logo image to display.
    */
-  private async createWebMap(webMapId: string, lookupLayerTitle: string, lookupFieldName: string, lookupFieldValue: string, projectionType: number, logoUrl: string): Promise<void> {
+  private async createWebMap(webMapId: string, lookupLayerTitle: string, lookupFieldName: string, lookupFieldValue: string, projectionType: number): Promise<void> {
     // Initialize the WebMap with the provided ID
     const webMap = new WebMap({
       portalItem: {
@@ -138,8 +184,7 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
       await this._mapView.when();
       console.log("WebMap and View are ready");
 
-      // Add widgets to the MapView
-      this.addWidgets(logoUrl);
+      this.addWidgets("")
 
       // Perform layer lookup if parameters are provided
       if (lookupLayerTitle && lookupFieldName && lookupFieldValue) {

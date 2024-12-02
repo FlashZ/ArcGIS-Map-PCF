@@ -13,7 +13,6 @@ export interface IInputs {
     lookupFieldName: ComponentFramework.PropertyTypes.StringProperty;
     lookupFieldValue: ComponentFramework.PropertyTypes.StringProperty;
     logoUrl: ComponentFramework.PropertyTypes.StringProperty;
-    redirectUri: ComponentFramework.PropertyTypes.StringProperty;
 }
 export interface IOutputs {
     lookupFieldValue?: string;
