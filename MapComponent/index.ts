@@ -67,6 +67,7 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
     const lookupLayerTitle = parameters.lookupLayerId?.raw || ""; // Changed to use title
     const lookupFieldName = parameters.lookupFieldName?.raw || "";
     const lookupFieldValue = parameters.lookupFieldValue?.raw || "";
+    const logoUrl = parameters.logoUrl.raw || "";
 
     // Ensure required parameters are provided
     if (!clientId || !webMapId) {
@@ -91,7 +92,7 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
       // Authenticate with ArcGIS
       await IdentityManager.getCredential(`${portalUrl}/sharing`);
       // Create and configure the WebMap
-      await this.createWebMap(webMapId, lookupLayerTitle, lookupFieldName, lookupFieldValue, projectionType);
+      await this.createWebMap(webMapId, lookupLayerTitle, lookupFieldName, lookupFieldValue, projectionType, logoUrl);
     } catch (error) {
       console.error("Authentication or map creation failed:", error);
     }
@@ -104,8 +105,9 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
    * @param lookupFieldName The field name to lookup.
    * @param lookupFieldValue The value to lookup in the field.
    * @param projectionType The projection type (spatial reference).
+   * @param logoUrl The URL of the logo image to display.
    */
-  private async createWebMap(webMapId: string, lookupLayerTitle: string, lookupFieldName: string, lookupFieldValue: string, projectionType: number): Promise<void> {
+  private async createWebMap(webMapId: string, lookupLayerTitle: string, lookupFieldName: string, lookupFieldValue: string, projectionType: number, logoUrl: string): Promise<void> {
     // Initialize the WebMap with the provided ID
     const webMap = new WebMap({
       portalItem: {
@@ -137,7 +139,7 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
       console.log("WebMap and View are ready");
 
       // Add widgets to the MapView
-      this.addWidgets();
+      this.addWidgets(logoUrl);
 
       // Perform layer lookup if parameters are provided
       if (lookupLayerTitle && lookupFieldName && lookupFieldValue) {
@@ -150,8 +152,9 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
 
   /**
    * Adds various widgets to the map view.
+   * @param logoUrl The URL of the logo image to display.
    */
-  private addWidgets(): void {
+  private addWidgets(logoUrl: string): void {
     if (!this._mapView) return;
 
     // Create and configure the LayerList widget
@@ -188,6 +191,18 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
       view: this._mapView
     });
     this._mapView.ui.add(zoomWidget, "top-left");
+
+    // Add a logo image to the bottom-right corner of the view
+    if (logoUrl) {
+      const logoDiv = document.createElement("div");
+      logoDiv.style.position = "absolute";
+      logoDiv.style.bottom = "10px";
+      logoDiv.style.right = "10px";
+      logoDiv.style.width = "150px"; // Adjust the width as needed
+      logoDiv.style.height = "auto"; // Maintain aspect ratio
+      logoDiv.innerHTML = `<img src="${logoUrl}" style="width: 100%; height: auto;">`;
+      this._mapView.ui.add(logoDiv, "manual");
+    }
   }
 
   /**

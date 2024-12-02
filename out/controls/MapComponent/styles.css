@@ -1,0 +1,41 @@
+@import url('https://js.arcgis.com/4.26/esri/themes/light/main.css');
+
+.esri-view {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.esri-view-root {
+  height: 100%;
+  width: 100%;
+}
+
+/* Custom styles for LayerList widget */
+.esri-layer-list {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  font-family: Arial, sans-serif;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.esri-layer-list__item {
+  margin-bottom: 5px;
+}
+
+.esri-layer-list__item-label {
+  font-weight: bold;
+  color: #333;
+}
+
+.esri-layer-list__item-toggle {
+  color: #0079c1;
+}
+
+.esri-layer-list__item-toggle:hover {
+  color: #005a8c;
+}
