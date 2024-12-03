@@ -5,13 +5,12 @@ import WebMap from "@arcgis/core/WebMap";
 import MapView from "@arcgis/core/views/MapView";
 import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
 import esriConfig from "@arcgis/core/config";
-import OAuthInfo from "@arcgis/core/identity/OAuthInfo";
-import IdentityManager from "@arcgis/core/identity/IdentityManager";
 import SpatialReference from "@arcgis/core/geometry/SpatialReference";
 import LayerList from "@arcgis/core/widgets/LayerList";
 import Home from "@arcgis/core/widgets/Home";
 import Zoom from "@arcgis/core/widgets/Zoom";
 import Expand from "@arcgis/core/widgets/Expand";
+import esriId from "@arcgis/core/identity/IdentityManager";
 
 /**
  * MapComponent class implementing the PCF StandardControl interface.
@@ -25,6 +24,13 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
   private _context: ComponentFramework.Context<IInputs>; // The context provided by the PowerApps framework
   private _notifyOutputChanged: () => void; // Callback function to notify the framework of output changes
 
+  // Replace with your actual Client ID and Secret securely
+  private clientId: string = '5JN2FgmAIUUdXZq7'; // Replace with your real Client ID
+  private clientSecret: string = '7f0cf8002ea446048c962d2a6414695c'; // Replace with your real Client Secret
+  private tokenExpiry: number = 0; // To track token expiry
+  private accessToken: string = ''; // To store the current access token
+  private logoUrl: string = ''; // Optional: URL for the logo
+
   /**
    * Initializes the control instance.
    * @param context The context for the control.
@@ -32,129 +38,166 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
    * @param state The control state.
    * @param container The HTML element to render the control in.
    */
-
-  public init(
+  public async init(
     context: ComponentFramework.Context<IInputs>,
     notifyOutputChanged: () => void,
     state: ComponentFramework.Dictionary,
     container: HTMLDivElement
-  ): void {
-    // Save context and callback
+  ): Promise<void> {
     this._context = context;
-    this._controlViewRendered = false;
-    this._container = container;
     this._notifyOutputChanged = notifyOutputChanged;
+    this._container = container;
   
-    // Create a container for the map view and append it to the main container
+    // Set container dimensions
+    this._container.style.width = '800px';
+    this._container.style.height = '600px';
+  
+    // Create and style the map view container
     this._mapViewContainer = document.createElement('div');
     this._mapViewContainer.style.width = '100%';
     this._mapViewContainer.style.height = '100%';
-    this._mapViewContainer.classList.add("ArcGISMap_Container");
     this._container.appendChild(this._mapViewContainer);
   
-    // Wrap the map initialization in a try-catch block
+    // Set the portal URL
+    esriConfig.portalUrl = "https://ultrafast.maps.arcgis.com";
+  
     try {
-      // Initialize the map with the provided parameters
-      this.initializeMap(context.parameters);
+      // Obtain and register the access token
+      this.accessToken = await this.getAccessToken(this.clientId, this.clientSecret);
+      esriId.registerToken({
+        server: "https://ultrafast.maps.arcgis.com",
+        token: this.accessToken,
+        expires: this.tokenExpiry
+      });
+  
+      // Initialize the map
+      await this.initializeMap(context.parameters.webMapId.raw || "");
     } catch (error) {
-      console.error("Map initialization failed:", error);
-      // Optionally, display a placeholder or message in the designer
-      this._mapViewContainer.innerText = "Map will render during runtime.";
+      console.error("Initialization failed:", error);
+      this._mapViewContainer.innerText = "Failed to load the map. Please try again later.";
     }
   
-    // Track container resize events to adjust the map view accordingly
+    // Track container resize events
     context.mode.trackContainerResize(true);
   }
+  /**
+   * Registers tokens for all servers used by the WebMap.
+   * @param accessToken The access token obtained via client credentials.
+   * @param webMap The loaded WebMap instance.
+   */
+  private registerTokenForServers(accessToken: string, webMap: WebMap): void {
+    const servers = new Set<string>();
+
+    webMap.allLayers.forEach(layer => {
+      const url = (layer as any).url;
+      if (url) {
+        const server = `${url.split("/arcgis/rest/services")[0]}`;
+        console.log(`Extracted server URL: ${server}`);
+        servers.add(server);
+      }
+    });
+
+    servers.forEach(server => {
+      esriId.registerToken({
+        server: server,
+        token: accessToken,
+        expires: this.tokenExpiry // Ensure correct expiry
+      });
+      console.log(`Token registered for server: ${server}`);
+    });
+  }
 
   /**
-   * Initializes the ArcGIS map with given parameters.
-   * @param parameters The input parameters for the map.
+   * Obtains an access token using the Client Credentials Flow.
+   * @param clientId The client ID of your ArcGIS application.
+   * @param clientSecret The client secret of your ArcGIS application.
+   * @returns The access token as a string.
    */
-  private async authenticateArcGIS(parameters: IInputs): Promise<boolean> {
-    const portalUrl = parameters.portalUrl.raw || "https://www.arcgis.com";
-    const clientId = parameters.clientId.raw || "";
-  
-    if (!clientId) {
-      console.error("Client ID is not provided.");
-      return false;
-    }
-  
-    esriConfig.portalUrl = portalUrl;
-  
-    const info = new OAuthInfo({
-      appId: clientId,
-      portalUrl: portalUrl,
-      popup: false,
-      //popupCallbackUrl: window.location.href
-    });
-  
-    IdentityManager.registerOAuthInfos([info]);
-  
-    // Check if we already have a credential
-    const credential = IdentityManager.findCredential(portalUrl);
-    if (credential) {
-      console.log("Already authenticated");
-      return true;
-    }
-  
+  private async getAccessToken(clientId: string, clientSecret: string): Promise<string> {
+    const params = new URLSearchParams();
+    params.append('grant_type', 'client_credentials');
+    params.append('client_id', clientId);
+    params.append('client_secret', clientSecret);
+    params.append('f', 'json');
+
     try {
-      await IdentityManager.checkSignInStatus(portalUrl);
-      console.log("Authentication successful");
-      return true;
+      const response = await fetch('https://ultrafast.maps.arcgis.com/sharing/rest/oauth2/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: params.toString(),
+      });
+
+      const data = await response.json();
+
+      console.log('Access token response:', data); // Debug log
+
+      if (data.access_token) {
+        this.tokenExpiry = Date.now() + (data.expires_in * 1000);
+        return data.access_token;
+      } else {
+        throw new Error(`Failed to obtain access token: ${data.error?.message || 'Unknown error'}`);
+      }
     } catch (error) {
-      console.log("User is not authenticated, attempting to get credential");
-      try {
-        await IdentityManager.getCredential(portalUrl);
-        console.log("Authentication successful");
-        return true;
-      } catch (error) {
-        console.error("Authentication failed:", error);
-        return false;
+      console.error('Error obtaining access token:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Verifies the token by fetching portal details.
+   * @param accessToken The access token to verify.
+   */
+  private async verifyToken(accessToken: string): Promise<void> {
+    const portalSelfUrl = `https://ultrafast.maps.arcgis.com/sharing/rest/portals/self?f=json&token=${accessToken}`;
+    
+    try {
+      const response = await fetch(portalSelfUrl);
+      const data = await response.json();
+
+      if (data.error) {
+        console.error("Token verification failed:", data.error);
+        throw new Error(`Token verification failed: ${data.error.message}`);
+      } else {
+        console.log("Token is valid. Portal details:", data);
+      }
+    } catch (error) {
+      console.error("Error verifying token:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Ensures that the current token is valid. If it's about to expire, renews it.
+   * @returns The valid access token.
+   */
+  private async ensureValidToken(): Promise<string> {
+    const bufferTime = 5 * 60 * 1000; // 5 minutes
+    if (Date.now() > (this.tokenExpiry - bufferTime)) {
+      // Token is about to expire or has expired, renew it
+      this.accessToken = await this.getAccessToken(this.clientId, this.clientSecret);
+      console.log('Access token renewed:', this.accessToken); // Debug log
+
+      // Verify the new token
+      await this.verifyToken(this.accessToken);
+
+      // Re-register tokens for all servers
+      if (this._mapView && this._mapView.map) {
+        this.registerTokenForServers(this.accessToken, this._mapView.map as WebMap);
       }
     }
+    return this.accessToken;
   }
-  
-
-  private async initializeMap(parameters: IInputs): Promise<void> {
-    const isAuthenticated = await this.authenticateArcGIS(parameters);
-  
-    if (!isAuthenticated) {
-      console.error("Could not authenticate with ArcGIS");
-      return;
-    }
-  
-    const webMapId = parameters.webMapId.raw || "";
-    const projectionType = parameters.projectionType.raw || 4326;
-    const lookupLayerTitle = parameters.lookupLayerId?.raw || "";
-    const lookupFieldName = parameters.lookupFieldName?.raw || "";
-    const lookupFieldValue = parameters.lookupFieldValue?.raw || "";
-    const logoUrl = parameters.logoUrl.raw || "";
-  
-    try {
-      await this.createWebMap(
-        webMapId,
-        lookupLayerTitle,
-        lookupFieldName,
-        lookupFieldValue,
-        projectionType
-      );
-    } catch (error) {
-      console.error("Map creation failed:", error);
-    }
-  }
-
 
   /**
-   * Creates and configures the WebMap.
+   * Initializes the WebMap and MapView.
    * @param webMapId The ID of the WebMap.
-   * @param lookupLayerTitle The title of the layer to lookup.
-   * @param lookupFieldName The field name to lookup.
-   * @param lookupFieldValue The value to lookup in the field.
-   * @param projectionType The projection type (spatial reference).
-   * @param logoUrl The URL of the logo image to display.
    */
-  private async createWebMap(webMapId: string, lookupLayerTitle: string, lookupFieldName: string, lookupFieldValue: string, projectionType: number): Promise<void> {
-    // Initialize the WebMap with the provided ID
+  private async initializeMap(webMapId: string): Promise<void> {
+    // Ensure the token is valid
+    const validToken = await this.ensureValidToken();
+
     const webMap = new WebMap({
       portalItem: {
         id: webMapId
@@ -164,8 +207,6 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
     try {
       // Wait for the WebMap to load
       await webMap.load();
-
-      // Log the layers to debug the lookup issue
       console.log("Loaded WebMap layers:", webMap.layers);
 
       // Initialize the MapView with the WebMap
@@ -178,20 +219,28 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
       });
 
       // Add a passive event listener for wheel events to improve performance
-      this._mapViewContainer.addEventListener('wheel', () => {}, { passive: true });
+      this._mapViewContainer.addEventListener('wheel', () => { }, { passive: true });
 
       // Wait for the MapView to be ready
       await this._mapView.when();
       console.log("WebMap and View are ready");
 
-      this.addWidgets("")
+      this.addWidgets(this.logoUrl);
 
       // Perform layer lookup if parameters are provided
-      if (lookupLayerTitle && lookupFieldName && lookupFieldValue) {
-        await this.performLayerLookup(webMap, lookupLayerTitle, lookupFieldName, lookupFieldValue, projectionType);
+      const { lookupLayerId, lookupFieldName, lookupFieldValue, projectionType } = this._context.parameters;
+      if (lookupLayerId?.raw && lookupFieldName?.raw && lookupFieldValue?.raw) {
+        await this.performLayerLookup(
+          webMap,
+          lookupLayerId.raw,
+          lookupFieldName.raw,
+          lookupFieldValue.raw,
+          projectionType.raw || 4326
+        );
       }
     } catch (error) {
       console.error("Error in map creation or initialization:", error);
+      this._mapViewContainer.innerText = "Failed to load the map. Please try again later.";
     }
   }
 
@@ -217,13 +266,13 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
     });
 
     // Wrap the LayerList widget in an Expand widget
-    const expand = new Expand({
+    const expandLayerList = new Expand({
       view: this._mapView,
       content: layerList
     });
 
     // Add the Expand widget to the top-right corner of the view
-    this._mapView.ui.add(expand, "top-right");
+    this._mapView.ui.add(expandLayerList, "top-right");
 
     // Add the Home widget to the top-left corner of the view
     const homeWidget = new Home({
@@ -258,13 +307,22 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
    * @param lookupFieldValue The value to lookup in the field.
    * @param projectionType The projection type (spatial reference).
    */
-  private async performLayerLookup(webMap: WebMap, lookupLayerTitle: string, lookupFieldName: string, lookupFieldValue: string, projectionType: number): Promise<void> {
+  private async performLayerLookup(
+    webMap: WebMap,
+    lookupLayerTitle: string,
+    lookupFieldName: string,
+    lookupFieldValue: string,
+    projectionType: number
+  ): Promise<void> {
     // Log available layers
-    console.log("Performing layer lookup. Available layers:", webMap.layers.toArray().map(layer => ({
-      id: layer.id,
-      title: layer.title,
-      type: layer.type
-    })));
+    console.log(
+      "Performing layer lookup. Available layers:",
+      webMap.layers.toArray().map(layer => ({
+        id: layer.id,
+        title: layer.title,
+        type: layer.type
+      }))
+    );
 
     // Find the layer in the WebMap by title
     const lookupLayer = webMap.layers.find(layer => layer.title === lookupLayerTitle) as FeatureLayer;
@@ -286,6 +344,7 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
         const feature = results.features[0];
         // Zoom to the feature's geometry
         await this._mapView?.goTo(feature.geometry);
+        console.log("Feature found and zoomed to:", feature);
       } else {
         console.warn("No features found for the given lookup value in the lookup layer");
       }

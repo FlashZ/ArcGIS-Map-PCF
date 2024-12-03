@@ -4,15 +4,15 @@
     <external-service-usage enabled="true">
       <domain>www.arcgis.com</domain>
     </external-service-usage>
-    <property name="clientId" display-name-key="ClientId_DisplayName" description-key="ClientId_Description" of-type="SingleLine.Text" usage="input" required="true"/>
-    <property name="clientSecret" display-name-key="ClientSecret_DisplayName" description-key="ClientSecret_Description" of-type="SingleLine.Text" usage="input" required="true"/>
-    <property name="portalUrl" display-name-key="PortalUrl_DisplayName" description-key="PortalUrl_Description" of-type="SingleLine.Text" usage="input" required="true"/>
-    <property name="webMapId" display-name-key="WebMapId_DisplayName" description-key="WebMapId_Description" of-type="SingleLine.Text" usage="input" required="true"/>
-    <property name="projectionType" display-name-key="ProjectionType_DisplayName" description-key="ProjectionType_Description" of-type="Whole.None" usage="input" required="false"/>
-    <property name="lookupLayerId" display-name-key="LookupLayerId_DisplayName" description-key="LookupLayerId_Description" of-type="SingleLine.Text" usage="input" required="false"/>
-    <property name="lookupFieldName" display-name-key="LookupFieldName_DisplayName" description-key="LookupFieldName_Description" of-type="SingleLine.Text" usage="input" required="false"/>
-    <property name="lookupFieldValue" display-name-key="LookupFieldValue_DisplayName" description-key="LookupFieldValue_Description" of-type="SingleLine.Text" usage="bound" required="false"/>
-    <property name="logoUrl" display-name-key="LogoUrl_DisplayName" description-key="LogoUrl_Description" of-type="SingleLine.Text" usage="input" required="false"/>
+    <property name="clientId" display-name-key="ClientId" description-key="ClientId_Description" of-type="SingleLine.Text" usage="input" required="true"/>
+    <property name="clientSecret" display-name-key="ClientSecret" description-key="ClientSecret_Description" of-type="SingleLine.Text" usage="input" required="true"/>
+    <property name="portalUrl" display-name-key="PortalUrl" description-key="PortalUrl_Description" of-type="SingleLine.Text" usage="input" required="true"/>
+    <property name="webMapId" display-name-key="WebMapId" description-key="WebMapId_Description" of-type="SingleLine.Text" usage="input" required="true"/>
+    <property name="projectionType" display-name-key="ProjectionType" description-key="ProjectionType_Description" of-type="Whole.None" usage="input" required="false"/>
+    <property name="lookupLayerId" display-name-key="LookupLayerId" description-key="LookupLayerId_Description" of-type="SingleLine.Text" usage="input" required="false"/>
+    <property name="lookupFieldName" display-name-key="LookupFieldName" description-key="LookupFieldName_Description" of-type="SingleLine.Text" usage="input" required="false"/>
+    <property name="lookupFieldValue" display-name-key="LookupFieldValue" description-key="LookupFieldValue_Description" of-type="SingleLine.Text" usage="bound" required="false"/>
+    <property name="logoUrl" display-name-key="LogoUrl" description-key="LogoUrl_Description" of-type="SingleLine.Text" usage="input" required="false"/>
     <resources>
       <code path="bundle.js" order="1"/>
       <css path="styles.css" order="1"/>
