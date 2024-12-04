@@ -11,6 +11,7 @@ export interface IInputs {
     lookupFieldName: ComponentFramework.PropertyTypes.StringProperty;
     lookupFieldValue: ComponentFramework.PropertyTypes.StringProperty;
     logoUrl: ComponentFramework.PropertyTypes.StringProperty;
+    projectionType: ComponentFramework.PropertyTypes.WholeNumberProperty;
 }
 export interface IOutputs {
     lookupFieldValue?: string;

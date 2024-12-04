@@ -15,7 +15,7 @@
     <property name="lookupFieldName" display-name-key="LookupFieldName" description-key="The field name in the lookup layer to filter features. Optional." of-type="SingleLine.Text" usage="input" required="false" />
     <property name="lookupFieldValue" display-name-key="LookupFieldValue" description-key="The value in the lookup field to filter features. Optional." of-type="SingleLine.Text" usage="bound" required="false" />
     <property name="logoUrl" display-name-key="LogoUrl" description-key="The URL of a logo to display on the map. Optional." of-type="SingleLine.Text" usage="input" required="false" />
-
+    <property name="projectionType" display-name-key="Projection Type" description-key="Type of projection to use for the map" of-type="Whole.None" usage="input" required="false"/> 
 
     <!-- Resources required for the control -->
     <resources>
