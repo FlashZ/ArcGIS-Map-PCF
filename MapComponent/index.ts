@@ -61,7 +61,7 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
     // Configure OAuth
     const oauthInfo = new OAuthInfo({
       appId: clientId,
-      popup: true, // Use popup: true if redirection causes issues
+      popup: false, // Use popup: true if redirection causes issues
       portalUrl: portalUrl, // Use the dynamic portal URL
     });
     IdentityManager.registerOAuthInfos([oauthInfo]);
@@ -88,15 +88,28 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
     signInButton.style.cursor = "pointer";
     this._container.appendChild(signInButton);
   
+    const handleMessage = async (event: MessageEvent) => {
+      // Verify the message is from your callback URL
+      if (!event.origin.includes("dynamics.com")) return;
+  
+      const { token } = event.data || {};
+      if (token) {
+        console.log("Token received. Initializing map...");
+        this._container.removeChild(signInButton);
+        window.removeEventListener("message", handleMessage); // Cleanup the listener
+        await this.initializeMap(this._context.parameters.webMapId.raw || "");
+      }
+    };
+  
+    // Listen for messages from the callback
+    window.addEventListener("message", handleMessage);
+  
     signInButton.addEventListener("click", async () => {
       try {
-        // Use popup-based sign-in
+        // Trigger popup-based login
         await IdentityManager.getCredential(`${portalUrl}/sharing`);
-        this._container.removeChild(signInButton);
-        await this.initializeMap(this._context.parameters.webMapId.raw || "");
       } catch (error) {
         console.error("Error during popup-based sign-in:", error);
-        this.showMessage("Sign-in failed. Please try again.");
       }
     });
   }
