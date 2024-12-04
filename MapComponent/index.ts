@@ -61,7 +61,7 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
     // Configure OAuth
     const oauthInfo = new OAuthInfo({
       appId: clientId,
-      popup: false, // Use popup: true if redirection causes issues
+      popup: true, // Use popup: true if redirection causes issues
       portalUrl: portalUrl, // Use the dynamic portal URL
     });
     IdentityManager.registerOAuthInfos([oauthInfo]);
@@ -90,11 +90,13 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
   
     signInButton.addEventListener("click", async () => {
       try {
-        await IdentityManager.getCredential(portalUrl);
+        // Use popup-based sign-in
+        await IdentityManager.getCredential(`${portalUrl}/sharing`);
         this._container.removeChild(signInButton);
         await this.initializeMap(this._context.parameters.webMapId.raw || "");
       } catch (error) {
-        console.error("Error during sign-in:", error);
+        console.error("Error during popup-based sign-in:", error);
+        this.showMessage("Sign-in failed. Please try again.");
       }
     });
   }
