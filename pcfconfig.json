@@ -8,11 +8,6 @@
         {
           "path": "./index.ts"
         }
-      ],
-      "css": [
-        {
-          "path": "./styles.css"
-        }
       ]
     }
   }

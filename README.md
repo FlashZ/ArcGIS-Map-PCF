@@ -95,7 +95,6 @@ This project provides a custom PCF control that embeds ArcGIS WebMaps into Power
 
 - **portalUrl**: Customize if using a portal other than the default ArcGIS Online.
 - **lookupLayerTitle**, **lookupFieldName**, **lookupFieldValue**: Set these to perform automatic zooming to a specific feature.
-- **logoUrl**: Provide a URL to an image to display as a logo on the map.
 - **projectionType**: Change if a different spatial reference is needed.
 
 ## Dependencies
