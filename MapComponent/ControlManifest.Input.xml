@@ -1,27 +1,22 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest>
-  <control namespace="ARCGISMapPCF" constructor="MapComponent" version="0.0.3" display-name-key="MapComponent_DisplayName" description-key="MapComponent_Description" control-type="standard">
-    
+  <control namespace="ARCGISMapPCF" constructor="MapComponent" version="0.0.3" display-name-key="ARCGis Map Component" description-key="MapComponent_Description" control-type="standard">
     <!-- Enable external service usage for ArcGIS -->
     <external-service-usage enabled="true">
       <domain>www.arcgis.com</domain>
     </external-service-usage>
-
     <!-- Define input properties for the control -->
     <property name="clientId" display-name-key="ClientId" description-key="The Client ID for your ArcGIS OAuth application. Required for authentication." of-type="SingleLine.Text" usage="input" required="true" />
     <property name="portalUrl" display-name-key="PortalUrl" description-key="The URL of your ArcGIS Online portal. Default is https://www.arcgis.com." of-type="SingleLine.Text" usage="input" required="true" />
     <property name="webMapId" display-name-key="WebMapId" description-key="The ID of the WebMap you want to display from ArcGIS Online." of-type="SingleLine.Text" usage="input" required="true" />
     <property name="lookupLayerId" display-name-key="LookupLayerId" description-key="The ID of the layer in the WebMap where lookup operations will occur. Optional." of-type="SingleLine.Text" usage="input" required="false" />
     <property name="lookupFieldName" display-name-key="LookupFieldName" description-key="The field name in the lookup layer to filter features. Optional." of-type="SingleLine.Text" usage="input" required="false" />
-    <property name="lookupFieldValue" display-name-key="LookupFieldValue" description-key="The value in the lookup field to filter features. Optional." of-type="SingleLine.Text" usage="bound" required="false" />
+    <property name="lookupFieldValue" display-name-key="LookupFieldValue" description-key="The value in the lookup field to filter features. Optional." of-type="SingleLine.Text" usage="input" required="false" />
     <property name="logoUrl" display-name-key="LogoUrl" description-key="The URL of a logo to display on the map. Optional." of-type="SingleLine.Text" usage="input" required="false" />
-    <property name="projectionType" display-name-key="Projection Type" description-key="Type of projection to use for the map" of-type="Whole.None" usage="input" required="false"/> 
-
+    <property name="projectionType" display-name-key="Projection Type" description-key="Type of projection to use for the map" of-type="Whole.None" usage="input" required="false" />
     <!-- Resources required for the control -->
     <resources>
-      <code path="index.ts" order="1"/>
+      <code path="index.ts" order="1" />
     </resources>
   </control>
-
-
 </manifest>

@@ -1,18 +1,17 @@
 "use strict";
 
 import { IInputs, IOutputs } from "./generated/ManifestTypes";
-import WebMap from "@arcgis/core/WebMap";
-import MapView from "@arcgis/core/views/MapView";
-import esriConfig from "@arcgis/core/config";
-import OAuthInfo from "@arcgis/core/identity/OAuthInfo";
-import IdentityManager from "@arcgis/core/identity/IdentityManager";
-import LayerList from "@arcgis/core/widgets/LayerList";
-import Home from "@arcgis/core/widgets/Home";
-import Zoom from "@arcgis/core/widgets/Zoom";
-import Expand from "@arcgis/core/widgets/Expand";
+import WebMap from "@arcgis/core/WebMap.js";
+import MapView from "@arcgis/core/views/MapView.js";
+import OAuthInfo from "@arcgis/core/identity/OAuthInfo.js";
+import IdentityManager from "@arcgis/core/identity/IdentityManager.js";
+import LayerList from "@arcgis/core/widgets/LayerList.js";
+import Home from "@arcgis/core/widgets/Home.js";
+import Zoom from "@arcgis/core/widgets/Zoom.js";
+import Expand from "@arcgis/core/widgets/Expand.js";
 import '@arcgis/core/assets/esri/themes/light/main.css';
-import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
-import SpatialReference from "@arcgis/core/geometry/SpatialReference";
+import FeatureLayer from "@arcgis/core/layers/FeatureLayer.js";
+import SpatialReference from "@arcgis/core/geometry/SpatialReference.js";
 
 /**
  * MapComponent class implementing the PCF StandardControl interface using OAuth2.
@@ -50,14 +49,30 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
       console.error("Client ID is required for OAuth.");
       return;
     }
+
+    context.mode.trackContainerResize(true);
   
     // Create and style the map view container
     this._mapViewContainer = document.createElement('div');
-    this._mapViewContainer.style.width = '500px';
-    this._mapViewContainer.style.height = '500px';
+    this._mapViewContainer.style.width = '${context.mode.allocatedWidth}px';
+    this._mapViewContainer.style.height = '${context.mode.allocatedHeight}px';
     this._mapViewContainer.classList.add("ArcGISMap_Container");
     this._container.appendChild(this._mapViewContainer);
   
+    const storedToken = localStorage.getItem("arcgis_token");
+    if (storedToken) {
+      const { token, expirationTime } = JSON.parse(storedToken);
+      if (Date.now() < expirationTime) {
+        IdentityManager.registerToken({
+          server: `${portalUrl}/sharing/rest`,
+          token: token,
+        });
+        await this.initializeMap(context.parameters.webMapId.raw || "");
+        return;
+      } else {
+        localStorage.removeItem("arcgis_token");
+      }
+    }
     // Configure OAuth
     const oauthInfo = new OAuthInfo({
       appId: clientId,
@@ -90,30 +105,29 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
     this._container.appendChild(signInButton);
   
     const handleMessage = async (event: MessageEvent) => {
-      // Verify the message origin to ensure security
       if (!event.origin.includes("dynamics.com")) return;
   
-      const { token } = event.data || {};
+      const { token, expiresIn } = event.data || {};
       if (token) {
         console.log("Token received. Initializing map...");
-        // Register the token with IdentityManager
+        const expirationTime = Date.now() + parseInt(expiresIn) * 1000;
+        localStorage.setItem("arcgis_token", JSON.stringify({ token, expirationTime }));
+  
         IdentityManager.registerToken({
           server: `${portalUrl}/sharing/rest`,
           token: token,
         });
   
         this._container.removeChild(signInButton);
-        window.removeEventListener("message", handleMessage); // Cleanup listener
+        window.removeEventListener("message", handleMessage);
         await this.initializeMap(this._context.parameters.webMapId.raw || "");
       }
     };
   
-    // Listen for messages from the callback
     window.addEventListener("message", handleMessage);
   
     signInButton.addEventListener("click", async () => {
       try {
-        // Trigger popup-based login
         await IdentityManager.getCredential(`${portalUrl}/sharing`);
       } catch (error) {
         console.error("Error during popup-based sign-in:", error);
@@ -267,12 +281,16 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
   public updateView(context: ComponentFramework.Context<IInputs>): void {
     this._context = context;
   
-    // Update container dimensions
-    this._container.style.width = `${context.mode.allocatedWidth}px`;
-    this._container.style.height = `${context.mode.allocatedHeight}px`;
-  
+    // Update container size dynamically
+    const width = `${context.mode.allocatedWidth}px`;
+    const height = `${context.mode.allocatedHeight}px`;
+    this._mapViewContainer.style.width = width;
+    this._mapViewContainer.style.height = height;
+
+  // Trigger map view resize event
     if (this._mapView) {
-      this._mapView.container.dispatchEvent(new Event("resize"));
+    this._mapView.container.dispatchEvent(new Event("resize"));
+    }
   
       // Reinitialize the map if the sign-in state changes
       IdentityManager.checkSignInStatus(this._context.parameters.portalUrl.raw || "")
@@ -295,7 +313,7 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
         );
       }
     }
-  }
+
 
   /**
    * Gets the outputs of the control.
