@@ -61,8 +61,9 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
     // Configure OAuth
     const oauthInfo = new OAuthInfo({
       appId: clientId,
-      popup: false, // Use popup: true if redirection causes issues
+      popup: true, // Use popup: true if redirection causes issues
       portalUrl: portalUrl, // Use the dynamic portal URL
+      popupCallbackUrl: "https://orgf5419fa8.crm6.dynamics.com/WebResources/cre67_oauthcallback", // Dynamics-hosted callback page
     });
     IdentityManager.registerOAuthInfos([oauthInfo]);
   
@@ -89,14 +90,20 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
     this._container.appendChild(signInButton);
   
     const handleMessage = async (event: MessageEvent) => {
-      // Verify the message is from your callback URL
+      // Verify the message origin to ensure security
       if (!event.origin.includes("dynamics.com")) return;
   
       const { token } = event.data || {};
       if (token) {
         console.log("Token received. Initializing map...");
+        // Register the token with IdentityManager
+        IdentityManager.registerToken({
+          server: `${portalUrl}/sharing/rest`,
+          token: token,
+        });
+  
         this._container.removeChild(signInButton);
-        window.removeEventListener("message", handleMessage); // Cleanup the listener
+        window.removeEventListener("message", handleMessage); // Cleanup listener
         await this.initializeMap(this._context.parameters.webMapId.raw || "");
       }
     };
@@ -110,10 +117,10 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
         await IdentityManager.getCredential(`${portalUrl}/sharing`);
       } catch (error) {
         console.error("Error during popup-based sign-in:", error);
+        this.showMessage("Sign-in failed. Please try again.");
       }
     });
   }
-
   /**
    * Initializes the WebMap and MapView.
    */
@@ -266,6 +273,11 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
   
     if (this._mapView) {
       this._mapView.container.dispatchEvent(new Event("resize"));
+  
+      // Reinitialize the map if the sign-in state changes
+      IdentityManager.checkSignInStatus(this._context.parameters.portalUrl.raw || "")
+        .then(() => this.initializeMap(this._context.parameters.webMapId.raw || ""))
+        .catch(error => console.error("User not signed in:", error));
   
       // Check if lookupFieldValue has changed and re-run the lookup
       const lookupFieldValue = this._context.parameters.lookupFieldValue.raw || "";
