@@ -14,5 +14,4 @@ export interface IInputs {
     projectionType: ComponentFramework.PropertyTypes.WholeNumberProperty;
 }
 export interface IOutputs {
-    lookupFieldValue?: string;
 }
