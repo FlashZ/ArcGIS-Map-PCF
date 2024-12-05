@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest>
-  <control namespace="ARCGISMapPCF" constructor="MapComponent" version="0.0.3" display-name-key="ARCGis Map Component" description-key="MapComponent_Description" control-type="standard">
+  <control namespace="ARCGISMapPCF" constructor="MapComponent" version="0.0.3" display-name-key="ARCGis Map Component" description-key="ARCGis Map Component" control-type="standard">
     <!-- Enable external service usage for ArcGIS -->
     <external-service-usage enabled="true">
       <domain>www.arcgis.com</domain>
