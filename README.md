@@ -1,6 +1,8 @@
 # ArcGIS Map Component for PowerApps (PCF)
 
 An easy-to-use custom PowerApps component that embeds interactive ArcGIS WebMaps into your applications using the PowerApps Component Framework.
+This currently relies on User Authentication via a callback webresource, in the future I would like to get this working using true oauth or API keys rather than relying on the user signing in as it is intrusive UX when used in the model drive apps.
+**Use this in a dev environment only, use at your own risk**
 
 ## Support
 If you'd like to support my work:
