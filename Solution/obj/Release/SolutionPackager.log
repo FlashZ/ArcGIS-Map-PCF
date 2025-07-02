@@ -1,0 +1,20 @@
+2024-12-05 16:22:24.779 - Info	
+Packing H:\Powerapps\MapComponent\Solution\obj\Release\Metadata to bin\Release\Solution.zip
+
+2024-12-05 16:22:24.789 - Info	Processing Component: Entities
+2024-12-05 16:22:24.792 - Info	Processing Component: Roles
+2024-12-05 16:22:24.794 - Info	Processing Component: Workflows
+2024-12-05 16:22:24.794 - Info	Processing Component: FieldSecurityProfiles
+2024-12-05 16:22:24.795 - Info	Processing Component: Templates
+2024-12-05 16:22:24.795 - Info	Processing Component: EntityMaps
+2024-12-05 16:22:24.796 - Info	Processing Component: EntityRelationships
+2024-12-05 16:22:24.798 - Info	Processing Component: OrganizationSettings
+2024-12-05 16:22:24.799 - Info	Processing Component: optionsets
+2024-12-05 16:22:24.799 - Info	Processing Component: CustomControls
+2024-12-05 16:22:24.806 - Info	 - ARCGISMapPCF.MapComponent
+2024-12-05 16:22:24.827 - Info	Processing Component: SolutionPluginAssemblies
+2024-12-05 16:22:24.829 - Info	Processing Component: EntityDataProviders
+2024-12-05 16:22:24.835 - Info	Processing Sharded Component Files
+2024-12-05 16:22:25.651 - Info	
+Managed Pack complete.
+

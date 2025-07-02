@@ -1,0 +1,2 @@
+H:\Powerapps\MapComponent\Solution\obj\Release\Solution.cdsproj.AssemblyReference.cache
+H:\Powerapps\MapComponent\Solution\obj\Release\Solution.cdsproj.CoreCompileInputs.cache

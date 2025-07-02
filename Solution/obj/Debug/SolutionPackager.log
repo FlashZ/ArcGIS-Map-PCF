@@ -1,0 +1,339 @@
+2024-12-02 15:17:49.398 - Info	
+Packing H:\Powerapps\MapComponent\Solution\obj\Debug\Metadata to bin\Debug\Solution.zip
+
+2024-12-02 15:17:49.408 - Info	Processing Component: Entities
+2024-12-02 15:17:49.411 - Info	Processing Component: Roles
+2024-12-02 15:17:49.414 - Info	Processing Component: Workflows
+2024-12-02 15:17:49.414 - Info	Processing Component: FieldSecurityProfiles
+2024-12-02 15:17:49.415 - Info	Processing Component: Templates
+2024-12-02 15:17:49.416 - Info	Processing Component: EntityMaps
+2024-12-02 15:17:49.421 - Info	Processing Component: EntityRelationships
+2024-12-02 15:17:49.425 - Info	Processing Component: OrganizationSettings
+2024-12-02 15:17:49.427 - Info	Processing Component: optionsets
+2024-12-02 15:17:49.427 - Info	Processing Component: CustomControls
+2024-12-02 15:17:49.429 - Info	Processing Component: SolutionPluginAssemblies
+2024-12-02 15:17:49.432 - Info	Processing Component: EntityDataProviders
+2024-12-02 15:17:49.438 - Info	Processing Sharded Component Files
+2024-12-02 15:17:49.456 - Info	
+Unmanaged Pack complete.
+
+2024-12-02 15:25:55.343 - Info	
+Packing H:\Powerapps\MapComponent\Solution\obj\Debug\Metadata to bin\Debug\Solution.zip
+
+2024-12-02 15:25:55.352 - Info	Processing Component: Entities
+2024-12-02 15:25:55.355 - Info	Processing Component: Roles
+2024-12-02 15:25:55.358 - Info	Processing Component: Workflows
+2024-12-02 15:25:55.358 - Info	Processing Component: FieldSecurityProfiles
+2024-12-02 15:25:55.359 - Info	Processing Component: Templates
+2024-12-02 15:25:55.360 - Info	Processing Component: EntityMaps
+2024-12-02 15:25:55.360 - Info	Processing Component: EntityRelationships
+2024-12-02 15:25:55.362 - Info	Processing Component: OrganizationSettings
+2024-12-02 15:25:55.363 - Info	Processing Component: optionsets
+2024-12-02 15:25:55.363 - Info	Processing Component: CustomControls
+2024-12-02 15:25:55.369 - Info	 - ARCGISMapPCF.MapComponent
+2024-12-02 15:25:55.381 - Info	Processing Component: SolutionPluginAssemblies
+2024-12-02 15:25:55.382 - Info	Processing Component: EntityDataProviders
+2024-12-02 15:25:55.387 - Info	Processing Sharded Component Files
+2024-12-02 15:25:55.952 - Info	
+Unmanaged Pack complete.
+
+2024-12-02 16:05:37.193 - Info	
+Packing H:\Powerapps\MapComponent\Solution\obj\Debug\Metadata to bin\Debug\Solution.zip
+
+2024-12-02 16:05:37.203 - Info	Processing Component: Entities
+2024-12-02 16:05:37.206 - Info	Processing Component: Roles
+2024-12-02 16:05:37.209 - Info	Processing Component: Workflows
+2024-12-02 16:05:37.209 - Info	Processing Component: FieldSecurityProfiles
+2024-12-02 16:05:37.210 - Info	Processing Component: Templates
+2024-12-02 16:05:37.211 - Info	Processing Component: EntityMaps
+2024-12-02 16:05:37.215 - Info	Processing Component: EntityRelationships
+2024-12-02 16:05:37.217 - Info	Processing Component: OrganizationSettings
+2024-12-02 16:05:37.218 - Info	Processing Component: optionsets
+2024-12-02 16:05:37.219 - Info	Processing Component: CustomControls
+2024-12-02 16:05:37.223 - Info	 - ARCGISMapPCF.MapComponent
+2024-12-02 16:05:37.234 - Info	Processing Component: SolutionPluginAssemblies
+2024-12-02 16:05:37.235 - Info	Processing Component: EntityDataProviders
+2024-12-02 16:05:37.240 - Info	Processing Sharded Component Files
+2024-12-02 16:05:37.804 - Info	
+Unmanaged Pack complete.
+
+2024-12-02 16:38:06.332 - Info	
+Packing H:\Powerapps\MapComponent\Solution\obj\Debug\Metadata to bin\Debug\Solution.zip
+
+2024-12-02 16:38:06.347 - Info	Processing Component: Entities
+2024-12-02 16:38:06.353 - Info	Processing Component: Roles
+2024-12-02 16:38:06.356 - Info	Processing Component: Workflows
+2024-12-02 16:38:06.357 - Info	Processing Component: FieldSecurityProfiles
+2024-12-02 16:38:06.358 - Info	Processing Component: Templates
+2024-12-02 16:38:06.359 - Info	Processing Component: EntityMaps
+2024-12-02 16:38:06.359 - Info	Processing Component: EntityRelationships
+2024-12-02 16:38:06.362 - Info	Processing Component: OrganizationSettings
+2024-12-02 16:38:06.363 - Info	Processing Component: optionsets
+2024-12-02 16:38:06.366 - Info	Processing Component: CustomControls
+2024-12-02 16:38:06.372 - Info	 - ARCGISMapPCF.MapComponent
+2024-12-02 16:38:06.386 - Info	Processing Component: SolutionPluginAssemblies
+2024-12-02 16:38:06.387 - Info	Processing Component: EntityDataProviders
+2024-12-02 16:38:06.392 - Info	Processing Sharded Component Files
+2024-12-02 16:38:06.959 - Info	
+Unmanaged Pack complete.
+
+2024-12-02 16:49:20.297 - Info	
+Packing H:\Powerapps\MapComponent\Solution\obj\Debug\Metadata to bin\Debug\Solution.zip
+
+2024-12-02 16:49:20.309 - Info	Processing Component: Entities
+2024-12-02 16:49:20.311 - Info	Processing Component: Roles
+2024-12-02 16:49:20.314 - Info	Processing Component: Workflows
+2024-12-02 16:49:20.315 - Info	Processing Component: FieldSecurityProfiles
+2024-12-02 16:49:20.315 - Info	Processing Component: Templates
+2024-12-02 16:49:20.316 - Info	Processing Component: EntityMaps
+2024-12-02 16:49:20.317 - Info	Processing Component: EntityRelationships
+2024-12-02 16:49:20.320 - Info	Processing Component: OrganizationSettings
+2024-12-02 16:49:20.321 - Info	Processing Component: optionsets
+2024-12-02 16:49:20.322 - Info	Processing Component: CustomControls
+2024-12-02 16:49:20.329 - Info	 - ARCGISMapPCF.MapComponent
+2024-12-02 16:49:20.341 - Info	Processing Component: SolutionPluginAssemblies
+2024-12-02 16:49:20.343 - Info	Processing Component: EntityDataProviders
+2024-12-02 16:49:20.348 - Info	Processing Sharded Component Files
+2024-12-02 16:49:20.968 - Info	
+Unmanaged Pack complete.
+
+2024-12-05 11:27:16.577 - Info	
+Packing H:\Powerapps\MapComponent\Solution\obj\Debug\Metadata to bin\Debug\Solution.zip
+
+2024-12-05 11:27:16.588 - Info	Processing Component: Entities
+2024-12-05 11:27:16.591 - Info	Processing Component: Roles
+2024-12-05 11:27:16.593 - Info	Processing Component: Workflows
+2024-12-05 11:27:16.597 - Info	Processing Component: FieldSecurityProfiles
+2024-12-05 11:27:16.598 - Info	Processing Component: Templates
+2024-12-05 11:27:16.603 - Info	Processing Component: EntityMaps
+2024-12-05 11:27:16.604 - Info	Processing Component: EntityRelationships
+2024-12-05 11:27:16.606 - Info	Processing Component: OrganizationSettings
+2024-12-05 11:27:16.608 - Info	Processing Component: optionsets
+2024-12-05 11:27:16.609 - Info	Processing Component: CustomControls
+2024-12-05 11:27:16.615 - Info	 - ARCGISMapPCF.MapComponent
+2024-12-05 11:27:16.637 - Info	Processing Component: SolutionPluginAssemblies
+2024-12-05 11:27:16.639 - Info	Processing Component: EntityDataProviders
+2024-12-05 11:27:16.644 - Info	Processing Sharded Component Files
+2024-12-05 11:27:17.286 - Info	
+Unmanaged Pack complete.
+
+2024-12-05 11:37:04.238 - Info	
+Packing H:\Powerapps\MapComponent\Solution\obj\Debug\Metadata to bin\Debug\Solution.zip
+
+2024-12-05 11:37:04.249 - Info	Processing Component: Entities
+2024-12-05 11:37:04.252 - Info	Processing Component: Roles
+2024-12-05 11:37:04.255 - Info	Processing Component: Workflows
+2024-12-05 11:37:04.256 - Info	Processing Component: FieldSecurityProfiles
+2024-12-05 11:37:04.257 - Info	Processing Component: Templates
+2024-12-05 11:37:04.258 - Info	Processing Component: EntityMaps
+2024-12-05 11:37:04.259 - Info	Processing Component: EntityRelationships
+2024-12-05 11:37:04.261 - Info	Processing Component: OrganizationSettings
+2024-12-05 11:37:04.262 - Info	Processing Component: optionsets
+2024-12-05 11:37:04.262 - Info	Processing Component: CustomControls
+2024-12-05 11:37:04.267 - Info	 - ARCGISMapPCF.MapComponent
+2024-12-05 11:37:04.285 - Info	Processing Component: SolutionPluginAssemblies
+2024-12-05 11:37:04.286 - Info	Processing Component: EntityDataProviders
+2024-12-05 11:37:04.291 - Info	Processing Sharded Component Files
+2024-12-05 11:37:04.923 - Info	
+Unmanaged Pack complete.
+
+2024-12-05 11:39:06.866 - Info	
+Packing H:\Powerapps\MapComponent\Solution\obj\Debug\Metadata to bin\Debug\Solution.zip
+
+2024-12-05 11:39:06.880 - Info	Processing Component: Entities
+2024-12-05 11:39:06.884 - Info	Processing Component: Roles
+2024-12-05 11:39:06.888 - Info	Processing Component: Workflows
+2024-12-05 11:39:06.889 - Info	Processing Component: FieldSecurityProfiles
+2024-12-05 11:39:06.890 - Info	Processing Component: Templates
+2024-12-05 11:39:06.891 - Info	Processing Component: EntityMaps
+2024-12-05 11:39:06.892 - Info	Processing Component: EntityRelationships
+2024-12-05 11:39:06.898 - Info	Processing Component: OrganizationSettings
+2024-12-05 11:39:06.899 - Info	Processing Component: optionsets
+2024-12-05 11:39:06.900 - Info	Processing Component: CustomControls
+2024-12-05 11:39:06.906 - Info	 - ARCGISMapPCF.MapComponent
+2024-12-05 11:39:06.930 - Info	Processing Component: SolutionPluginAssemblies
+2024-12-05 11:39:06.932 - Info	Processing Component: EntityDataProviders
+2024-12-05 11:39:06.937 - Info	Processing Sharded Component Files
+2024-12-05 11:39:07.569 - Info	
+Unmanaged Pack complete.
+
+2024-12-05 11:46:57.099 - Info	
+Packing H:\Powerapps\MapComponent\Solution\obj\Debug\Metadata to bin\Debug\Solution.zip
+
+2024-12-05 11:46:57.109 - Info	Processing Component: Entities
+2024-12-05 11:46:57.112 - Info	Processing Component: Roles
+2024-12-05 11:46:57.116 - Info	Processing Component: Workflows
+2024-12-05 11:46:57.117 - Info	Processing Component: FieldSecurityProfiles
+2024-12-05 11:46:57.118 - Info	Processing Component: Templates
+2024-12-05 11:46:57.119 - Info	Processing Component: EntityMaps
+2024-12-05 11:46:57.119 - Info	Processing Component: EntityRelationships
+2024-12-05 11:46:57.122 - Info	Processing Component: OrganizationSettings
+2024-12-05 11:46:57.123 - Info	Processing Component: optionsets
+2024-12-05 11:46:57.124 - Info	Processing Component: CustomControls
+2024-12-05 11:46:57.129 - Info	 - ARCGISMapPCF.MapComponent
+2024-12-05 11:46:57.149 - Info	Processing Component: SolutionPluginAssemblies
+2024-12-05 11:46:57.151 - Info	Processing Component: EntityDataProviders
+2024-12-05 11:46:57.155 - Info	Processing Sharded Component Files
+2024-12-05 11:46:57.867 - Info	
+Unmanaged Pack complete.
+
+2024-12-05 11:55:32.305 - Info	
+Packing H:\Powerapps\MapComponent\Solution\obj\Debug\Metadata to bin\Debug\Solution.zip
+
+2024-12-05 11:55:32.315 - Info	Processing Component: Entities
+2024-12-05 11:55:32.317 - Info	Processing Component: Roles
+2024-12-05 11:55:32.320 - Info	Processing Component: Workflows
+2024-12-05 11:55:32.320 - Info	Processing Component: FieldSecurityProfiles
+2024-12-05 11:55:32.321 - Info	Processing Component: Templates
+2024-12-05 11:55:32.323 - Info	Processing Component: EntityMaps
+2024-12-05 11:55:32.324 - Info	Processing Component: EntityRelationships
+2024-12-05 11:55:32.326 - Info	Processing Component: OrganizationSettings
+2024-12-05 11:55:32.327 - Info	Processing Component: optionsets
+2024-12-05 11:55:32.327 - Info	Processing Component: CustomControls
+2024-12-05 11:55:32.332 - Info	 - ARCGISMapPCF.MapComponent
+2024-12-05 11:55:32.349 - Info	Processing Component: SolutionPluginAssemblies
+2024-12-05 11:55:32.350 - Info	Processing Component: EntityDataProviders
+2024-12-05 11:55:32.356 - Info	Processing Sharded Component Files
+2024-12-05 11:55:32.979 - Info	
+Unmanaged Pack complete.
+
+2024-12-05 12:03:01.153 - Info	
+Packing H:\Powerapps\MapComponent\Solution\obj\Debug\Metadata to bin\Debug\Solution.zip
+
+2024-12-05 12:03:01.163 - Info	Processing Component: Entities
+2024-12-05 12:03:01.167 - Info	Processing Component: Roles
+2024-12-05 12:03:01.169 - Info	Processing Component: Workflows
+2024-12-05 12:03:01.171 - Info	Processing Component: FieldSecurityProfiles
+2024-12-05 12:03:01.171 - Info	Processing Component: Templates
+2024-12-05 12:03:01.172 - Info	Processing Component: EntityMaps
+2024-12-05 12:03:01.173 - Info	Processing Component: EntityRelationships
+2024-12-05 12:03:01.175 - Info	Processing Component: OrganizationSettings
+2024-12-05 12:03:01.176 - Info	Processing Component: optionsets
+2024-12-05 12:03:01.177 - Info	Processing Component: CustomControls
+2024-12-05 12:03:01.181 - Info	 - ARCGISMapPCF.MapComponent
+2024-12-05 12:03:01.199 - Info	Processing Component: SolutionPluginAssemblies
+2024-12-05 12:03:01.200 - Info	Processing Component: EntityDataProviders
+2024-12-05 12:03:01.206 - Info	Processing Sharded Component Files
+2024-12-05 12:03:01.932 - Info	
+Unmanaged Pack complete.
+
+2024-12-05 12:16:54.454 - Info	
+Packing H:\Powerapps\MapComponent\Solution\obj\Debug\Metadata to bin\Debug\Solution.zip
+
+2024-12-05 12:16:54.465 - Info	Processing Component: Entities
+2024-12-05 12:16:54.468 - Info	Processing Component: Roles
+2024-12-05 12:16:54.471 - Info	Processing Component: Workflows
+2024-12-05 12:16:54.471 - Info	Processing Component: FieldSecurityProfiles
+2024-12-05 12:16:54.472 - Info	Processing Component: Templates
+2024-12-05 12:16:54.473 - Info	Processing Component: EntityMaps
+2024-12-05 12:16:54.474 - Info	Processing Component: EntityRelationships
+2024-12-05 12:16:54.477 - Info	Processing Component: OrganizationSettings
+2024-12-05 12:16:54.478 - Info	Processing Component: optionsets
+2024-12-05 12:16:54.478 - Info	Processing Component: CustomControls
+2024-12-05 12:16:54.484 - Info	 - ARCGISMapPCF.MapComponent
+2024-12-05 12:16:54.504 - Info	Processing Component: SolutionPluginAssemblies
+2024-12-05 12:16:54.506 - Info	Processing Component: EntityDataProviders
+2024-12-05 12:16:54.511 - Info	Processing Sharded Component Files
+2024-12-05 12:16:55.183 - Info	
+Unmanaged Pack complete.
+
+2024-12-05 12:24:46.826 - Info	
+Packing H:\Powerapps\MapComponent\Solution\obj\Debug\Metadata to bin\Debug\Solution.zip
+
+2024-12-05 12:24:46.838 - Info	Processing Component: Entities
+2024-12-05 12:24:46.841 - Info	Processing Component: Roles
+2024-12-05 12:24:46.844 - Info	Processing Component: Workflows
+2024-12-05 12:24:46.845 - Info	Processing Component: FieldSecurityProfiles
+2024-12-05 12:24:46.846 - Info	Processing Component: Templates
+2024-12-05 12:24:46.847 - Info	Processing Component: EntityMaps
+2024-12-05 12:24:46.848 - Info	Processing Component: EntityRelationships
+2024-12-05 12:24:46.851 - Info	Processing Component: OrganizationSettings
+2024-12-05 12:24:46.852 - Info	Processing Component: optionsets
+2024-12-05 12:24:46.853 - Info	Processing Component: CustomControls
+2024-12-05 12:24:46.860 - Info	 - ARCGISMapPCF.MapComponent
+2024-12-05 12:24:46.882 - Info	Processing Component: SolutionPluginAssemblies
+2024-12-05 12:24:46.884 - Info	Processing Component: EntityDataProviders
+2024-12-05 12:24:46.890 - Info	Processing Sharded Component Files
+2024-12-05 12:24:47.579 - Info	
+Unmanaged Pack complete.
+
+2024-12-05 12:29:56.960 - Info	
+Packing H:\Powerapps\MapComponent\Solution\obj\Debug\Metadata to bin\Debug\Solution.zip
+
+2024-12-05 12:29:56.970 - Info	Processing Component: Entities
+2024-12-05 12:29:56.972 - Info	Processing Component: Roles
+2024-12-05 12:29:56.975 - Info	Processing Component: Workflows
+2024-12-05 12:29:56.976 - Info	Processing Component: FieldSecurityProfiles
+2024-12-05 12:29:56.977 - Info	Processing Component: Templates
+2024-12-05 12:29:56.978 - Info	Processing Component: EntityMaps
+2024-12-05 12:29:56.978 - Info	Processing Component: EntityRelationships
+2024-12-05 12:29:56.980 - Info	Processing Component: OrganizationSettings
+2024-12-05 12:29:56.982 - Info	Processing Component: optionsets
+2024-12-05 12:29:56.983 - Info	Processing Component: CustomControls
+2024-12-05 12:29:56.988 - Info	 - ARCGISMapPCF.MapComponent
+2024-12-05 12:29:57.009 - Info	Processing Component: SolutionPluginAssemblies
+2024-12-05 12:29:57.011 - Info	Processing Component: EntityDataProviders
+2024-12-05 12:29:57.017 - Info	Processing Sharded Component Files
+2024-12-05 12:29:57.699 - Info	
+Unmanaged Pack complete.
+
+2024-12-05 12:40:30.020 - Info	
+Packing H:\Powerapps\MapComponent\Solution\obj\Debug\Metadata to bin\Debug\Solution.zip
+
+2024-12-05 12:40:30.030 - Info	Processing Component: Entities
+2024-12-05 12:40:30.034 - Info	Processing Component: Roles
+2024-12-05 12:40:30.037 - Info	Processing Component: Workflows
+2024-12-05 12:40:30.038 - Info	Processing Component: FieldSecurityProfiles
+2024-12-05 12:40:30.039 - Info	Processing Component: Templates
+2024-12-05 12:40:30.041 - Info	Processing Component: EntityMaps
+2024-12-05 12:40:30.041 - Info	Processing Component: EntityRelationships
+2024-12-05 12:40:30.045 - Info	Processing Component: OrganizationSettings
+2024-12-05 12:40:30.046 - Info	Processing Component: optionsets
+2024-12-05 12:40:30.046 - Info	Processing Component: CustomControls
+2024-12-05 12:40:30.055 - Info	 - ARCGISMapPCF.MapComponent
+2024-12-05 12:40:30.078 - Info	Processing Component: SolutionPluginAssemblies
+2024-12-05 12:40:30.081 - Info	Processing Component: EntityDataProviders
+2024-12-05 12:40:30.087 - Info	Processing Sharded Component Files
+2024-12-05 12:40:30.766 - Info	
+Unmanaged Pack complete.
+
+2024-12-05 13:39:02.831 - Info	
+Packing H:\Powerapps\MapComponent\Solution\obj\Debug\Metadata to bin\Debug\Solution.zip
+
+2024-12-05 13:39:02.840 - Info	Processing Component: Entities
+2024-12-05 13:39:02.842 - Info	Processing Component: Roles
+2024-12-05 13:39:02.844 - Info	Processing Component: Workflows
+2024-12-05 13:39:02.844 - Info	Processing Component: FieldSecurityProfiles
+2024-12-05 13:39:02.845 - Info	Processing Component: Templates
+2024-12-05 13:39:02.845 - Info	Processing Component: EntityMaps
+2024-12-05 13:39:02.845 - Info	Processing Component: EntityRelationships
+2024-12-05 13:39:02.847 - Info	Processing Component: OrganizationSettings
+2024-12-05 13:39:02.848 - Info	Processing Component: optionsets
+2024-12-05 13:39:02.848 - Info	Processing Component: CustomControls
+2024-12-05 13:39:02.852 - Info	 - ARCGISMapPCF.MapComponent
+2024-12-05 13:39:02.868 - Info	Processing Component: SolutionPluginAssemblies
+2024-12-05 13:39:02.869 - Info	Processing Component: EntityDataProviders
+2024-12-05 13:39:02.873 - Info	Processing Sharded Component Files
+2024-12-05 13:39:03.483 - Info	
+Unmanaged Pack complete.
+
+2024-12-05 14:11:14.598 - Info	
+Packing H:\Powerapps\MapComponent\Solution\obj\Debug\Metadata to bin\Debug\Solution.zip
+
+2024-12-05 14:11:14.609 - Info	Processing Component: Entities
+2024-12-05 14:11:14.612 - Info	Processing Component: Roles
+2024-12-05 14:11:14.615 - Info	Processing Component: Workflows
+2024-12-05 14:11:14.615 - Info	Processing Component: FieldSecurityProfiles
+2024-12-05 14:11:14.616 - Info	Processing Component: Templates
+2024-12-05 14:11:14.616 - Info	Processing Component: EntityMaps
+2024-12-05 14:11:14.617 - Info	Processing Component: EntityRelationships
+2024-12-05 14:11:14.619 - Info	Processing Component: OrganizationSettings
+2024-12-05 14:11:14.619 - Info	Processing Component: optionsets
+2024-12-05 14:11:14.620 - Info	Processing Component: CustomControls
+2024-12-05 14:11:14.625 - Info	 - ARCGISMapPCF.MapComponent
+2024-12-05 14:11:14.644 - Info	Processing Component: SolutionPluginAssemblies
+2024-12-05 14:11:14.645 - Info	Processing Component: EntityDataProviders
+2024-12-05 14:11:14.649 - Info	Processing Sharded Component Files
+2024-12-05 14:11:15.296 - Info	
+Unmanaged Pack complete.
+
