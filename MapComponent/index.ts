@@ -23,9 +23,6 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
   private _context: ComponentFramework.Context<IInputs>;
   private _notifyOutputChanged: () => void;
 
-  // OAuth Credentials
-  //private clientId: string = 'REvdjVLPtORmWelH'; // Replace with your actual OAuth App Client ID
-  //private portalUrl: string = 'https://ultrafast.maps.arcgis.com/sharing';
 
   /**
    * Initializes the control instance.
@@ -78,7 +75,7 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
       appId: clientId,
       popup: true, // Use popup: true if redirection causes issues
       portalUrl: portalUrl, // Use the dynamic portal URL
-      popupCallbackUrl: "https://orgf5419fa8.crm6.dynamics.com/WebResources/cre67_oauthcallback", // Dynamics-hosted callback page
+      popupCallbackUrl: "orgurl", // Dynamics-hosted callback page eg: "https://org1234567.crm.dynamics.com/WebResources/oauthcallback"
     });
     IdentityManager.registerOAuthInfos([oauthInfo]);
   
