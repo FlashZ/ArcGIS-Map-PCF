@@ -2,6 +2,11 @@
 
 An easy-to-use custom PowerApps component that embeds interactive ArcGIS WebMaps into your applications using the PowerApps Component Framework.
 
+## Support
+If you'd like to support my work:
+
+<a href="https://buymeacoffee.com/nickkb" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
+
 ## Quick Start
 
 1. **Upload oauth-callback.html** as a webresource
@@ -60,3 +65,9 @@ This PCF control provides seamless integration of ArcGIS WebMaps into PowerApps.
 - **Authentication Issues:** If authentication fails, verify your clientId and ensure your ArcGIS account has the appropriate permissions. See our [FAQ](#) for common fixes.
 - **Display Problems:** Ensure that the WebMap ID is correct. Check network console for errors regarding map loading.
 - **Environment Issues:** Tested with AGOL, currently doesn't support Enterprise.
+
+## Contributing
+
+Contributions to enhance functionality or fix issues are welcome! Please open an issue or submit a pull request with your suggestions.
+
+---
