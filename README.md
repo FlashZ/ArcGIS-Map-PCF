@@ -1,132 +1,62 @@
-# ArcGIS Map Component for PowerApps
+# ArcGIS Map Component for PowerApps (PCF)
 
-Integrate interactive ArcGIS WebMaps into your PowerApps applications using this custom PCF (PowerApps Component Framework) control.
+An easy-to-use custom PowerApps component that embeds interactive ArcGIS WebMaps into your applications using the PowerApps Component Framework.
 
-## Table of Contents
+## Quick Start
 
-- [Description](#description)
-- [Features](#features)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Configuration](#configuration)
-- [Dependencies](#dependencies)
-- [License](#license)
-- [Author](#author)
-- [Acknowledgements](#acknowledgements)
-- [Screenshots](#screenshots)
-- [Known Issues](#known-issues)
-- [Contributing](#contributing)
-- [Version History](#version-history)
+1. **Upload oauth-callback.html** as a webresource
+   - Get the resource url and update in index.ts
+  
+2. **Build the Solution**  
+   - use pac cli and npm to build the solution.
+
+3. **Import to PowerApps**  
+   - Log in to PowerApps and navigate to **Solutions**.
+   - Click **Import**, select the downloaded `solution.zip`, and follow the prompts.
+
+3. **Add the Control**  
+   - Open your app in PowerApps.
+   - Go to **Insert** > **Custom** > **ArcGIS Map Component**.
+   - Place the control on your canvas and configure its properties.
 
 ## Description
 
-This project provides a custom PCF control that embeds ArcGIS WebMaps into PowerApps. It allows for dynamic map integration, including authentication with ArcGIS, displaying specified WebMaps, performing layer lookups, and customizing map widgets and logos.
+This PCF control provides seamless integration of ArcGIS WebMaps into PowerApps. It simplifies map embedding by handling ArcGIS authentication, enabling dynamic map loading, and supporting customizable widgets—all within PowerApps.
 
 ## Features
 
-- **ArcGIS Authentication**: Supports OAuth authentication with ArcGIS using a client ID.
-- **WebMap Integration**: Loads and displays an ArcGIS WebMap by its ID.
-- **Layer Lookup**: Searches for features within a specified layer based on field values and zooms to them.
-- **Customizable Widgets**: Adds default widgets like LayerList, Home, and Zoom controls.
-- **Custom Logo**: Allows adding a custom logo to the map view.
-- **Projection Support**: Supports setting the spatial reference projection type.
-
-## Prerequisites
-
-- **PowerApps environment** with access to import custom solutions.
-- **ArcGIS account** with access to desired WebMaps.
-- **ArcGIS application client ID** for OAuth authentication.
-
-## Installation
-
-1. **Download the compiled solution**:
-
-   - Obtain the `solution.zip` file from the [Releases](https://github.com/flashz/arcgis-map-component-powerapps/releases) section of this repository.
-
-2. **Import the solution into your PowerApps environment**:
-
-   - Log in to your PowerApps environment.
-   - Navigate to **Solutions** in the left-hand menu.
-   - Click on **Import** in the top menu.
-   - Select the downloaded `solution.zip` file.
-   - Follow the prompts to complete the import process.
-
-3. **Verify the solution components**:
-
-   - After import, the solution should appear in your list of solutions.
-   - Expand the solution to see the included components, which should include the ArcGIS Map Component control.
-
-## Usage
-
-1. **Add the control to your PowerApps app**:
-
-   - Open the app where you want to use the control.
-   - In the app editor, select **Insert** > **Custom** > **ArcGIS Map Component**.
-   - Place the control on your canvas or add it to your model-driven app form.
-
-2. **Configure the control properties**:
-
-   - Select the control to view its properties.
-   - Set the following properties:
-
-     - **portalUrl**: (Optional) The ArcGIS portal URL (default: `https://www.arcgis.com`).
-     - **clientId**: Your ArcGIS application client ID (**Required**).
-     - **webMapId**: The ID of the WebMap to display (**Required**).
-     - **lookupLayerTitle**: (Optional) The title of the layer to perform a lookup on.
-     - **lookupFieldName**: (Optional) The field name to search within the lookup layer.
-     - **lookupFieldValue**: (Optional) The value to search for in the lookup field.
-     - **logoUrl**: (Optional) URL of a custom logo to display on the map.
-     - **projectionType**: (Optional) The spatial reference WKID (default: `4326`).
-
-3. **Run the app**:
-
-   - Save and publish your app.
-   - Test the control to ensure it loads the map correctly and responds to the configured parameters.
+- **Integrated ArcGIS Authentication:** Easily configure OAuth authentication using your ArcGIS client ID.
+- **Dynamic WebMap Loading:** Display specific WebMaps by setting the WebMap ID.
+- **Lookup and Zoom:** Automatically search for features and zoom to particular map areas.
+- **Customizable Widgets:** Supports built-in controls like LayerList, Home, and Zoom.
+- **Logo and Styling Options:** Add a custom logo and configure visual aspects.
+- **Flexible Projection Settings:** Set your desired spatial reference (default is WKID 4326).
 
 ## Configuration
 
 ### Required Parameters
-
-- **clientId**: Obtain this from your ArcGIS application credentials.
-- **webMapId**: The ID of the WebMap you wish to display.
+- **clientId:** Your ArcGIS application client ID.
+- **webMapId:** The ID of the ArcGIS WebMap to display.
 
 ### Optional Parameters
+- **portalUrl:** (Default: `https://www.arcgis.com`) URL for alternative ArcGIS portals.
+- **lookupLayerTitle / lookupFieldName / lookupFieldValue:** Parameters to enable feature lookup.
+- **logoUrl:** URL for a custom logo.
+- **projectionType:** Spatial reference WKID (default: `4326`).
 
-- **portalUrl**: Customize if using a portal other than the default ArcGIS Online.
-- **lookupLayerTitle**, **lookupFieldName**, **lookupFieldValue**: Set these to perform automatic zooming to a specific feature.
-- **projectionType**: Change if a different spatial reference is needed.
+## Usage
 
-## Dependencies
+1. Add the control to your PowerApps app.
+2. Configure properties in the properties panel:
+   ```plaintext
+   portalUrl: "https://www.arcgis.com"
+   clientId: "<Your ArcGIS Client ID>"
+   webMapId: "<Your WebMap ID>"
+   ```
+3. Save, publish, and test your app.
 
-- **ArcGIS Account**: Required for accessing secured WebMaps and services.
-- **PowerApps Component Framework**: For integrating custom controls into PowerApps.
+## Troubleshooting
 
-## License
-
-This project is licensed under the [MIT License](LICENSE).
-
-## Author
-
-- **[Nick Kerr-Bell](mailto:nick@Lanflat.net)**
-- **[FlashZ](https://github.com/FlashZ)**
-
-## Acknowledgements
-
-- **Esri** for the ArcGIS JavaScript API.
-- **Microsoft** for the PowerApps Component Framework.
-
-## Known Issues
-
-- **NOT WORKING IN POWERAPPS**: Authentication doesn't seem to work correctly, in the Powerapps Test Harness the PCF will display and pull data according to the permissions to your auth however will fail within a Powerapps environment, mostl likely due to callback url issues. Theoritically stripping all Auth in the code would all public data layers to work fine.
-
-
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request.
-
-## Version History
-
-- **v1.0.0**: Initial release.
-
----
+- **Authentication Issues:** If authentication fails, verify your clientId and ensure your ArcGIS account has the appropriate permissions. See our [FAQ](#) for common fixes.
+- **Display Problems:** Ensure that the WebMap ID is correct. Check network console for errors regarding map loading.
+- **Environment Issues:** Tested with AGOL, currently doesn't support Enterprise.

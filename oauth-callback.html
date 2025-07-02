@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>OAuth Callback</title>
+  <script>
+    // Extract the token from the URL fragment
+    const hash = window.location.hash.substring(1);
+    const params = new URLSearchParams(hash);
+
+    // Check if token exists
+    const token = params.get("access_token");
+    if (token) {
+      // Send the token back to the parent window
+      if (window.opener && !window.opener.closed) {
+        window.opener.postMessage({
+          token: token,
+          expiresIn: params.get("expires_in"),
+          username: params.get("username"),
+        }, "*");
+      }
+
+      // Close the popup
+      window.close();
+    } else {
+      // Show an error message if token is missing
+      document.body.innerHTML = "<p>Error: Unable to retrieve token. Please try again.</p>";
+    }
+  </script>
+</head>
+<body>
+  <p>Processing authentication...</p>
+</body>
+</html>
