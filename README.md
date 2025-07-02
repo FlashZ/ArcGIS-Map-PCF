@@ -64,7 +64,7 @@ This PCF control provides seamless integration of ArcGIS WebMaps into PowerApps.
 
 ## Troubleshooting
 
-- **Authentication Issues:** If authentication fails, verify your clientId and ensure your ArcGIS account has the appropriate permissions. See our [FAQ](#) for common fixes.
+- **Authentication Issues:** If authentication fails, verify your clientId and ensure your ArcGIS account has the appropriate permissions.
 - **Display Problems:** Ensure that the WebMap ID is correct. Check network console for errors regarding map loading.
 - **Environment Issues:** Tested with AGOL, currently doesn't support Enterprise.
 
