@@ -1,2 +1,0 @@
-H:\Powerapps\MapComponent\obj\Debug\Powerapps.pcfproj.AssemblyReference.cache
-H:\Powerapps\MapComponent\obj\Debug\Powerapps.pcfproj.CoreCompileInputs.cache
