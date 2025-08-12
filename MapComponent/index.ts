@@ -102,7 +102,7 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
     this._container.appendChild(signInButton);
   
     const handleMessage = async (event: MessageEvent) => {
-      if (!event.origin.includes("dynamics.com")) return;
+      if (event.origin !== window.location.origin) return;
   
       const { token, expiresIn } = event.data || {};
       if (token) {
@@ -231,10 +231,14 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
     }, 3000); // Message disappears after 3 seconds
   }
 
+  private escapeSingleQuotes(value: string): string {
+    return value.replace(/'/g, "''");
+  }
+
   private async performLayerLookup(
     webMap: WebMap,
     lookupLayerTitle: string,
-    lookupFieldName: string,
+    lookupFieldName:string,
     lookupFieldValue: string,
     projectionType: number
   ): Promise<void> {
@@ -249,9 +253,12 @@ export class MapComponent implements ComponentFramework.StandardControl<IInputs,
       // Ensure the layer is fully loaded
       await lookupLayer.load();
   
+      // Sanitize the lookup value to prevent injection attacks
+      const sanitizedValue = this.escapeSingleQuotes(lookupFieldValue);
+
       // Create a query to find features with the specified field value
       const query = lookupLayer.createQuery();
-      query.where = `${lookupFieldName} = '${lookupFieldValue}'`;
+      query.where = `${lookupFieldName} = '${sanitizedValue}'`;
       query.returnGeometry = true;
       query.outSpatialReference = SpatialReference.fromJSON({ wkid: projectionType });
   

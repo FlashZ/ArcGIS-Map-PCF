@@ -16,7 +16,7 @@
           token: token,
           expiresIn: params.get("expires_in"),
           username: params.get("username"),
-        }, "*");
+        }, window.location.origin);
       }
 
       // Close the popup
